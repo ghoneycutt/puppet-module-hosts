@@ -114,6 +114,14 @@ class hosts (
     }
   }
 
+  # On Debian based systems an entry for the fqdn with an alias of the hostname
+  # and IP of 127.0.1.1 is expected.
+  if $::osfamily == 'Debian' {
+    $fqdn_ip_real = '127.0.1.1'
+  } else {
+    $fqdn_ip_real = $fqdn_ip
+  }
+
   case $purge_hosts {
     'true','false': { }
     default: {
@@ -144,7 +152,7 @@ class hosts (
   @@host { $::fqdn:
     ensure       => $fqdn_ensure,
     host_aliases => $my_fqdn_host_aliases,
-    ip           => $fqdn_ip,
+    ip           => $fqdn_ip_real,
   }
 
   # only collect the exported entry above
