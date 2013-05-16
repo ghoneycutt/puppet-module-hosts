@@ -53,64 +53,97 @@
 # - *Default*: /etc/hosts
 #
 class hosts (
-  $enable_ipv4_localhost = 'true',
-  $enable_ipv6_localhost = 'true',
-  $enable_fqdn_entry     = 'true',
+  $enable_ipv4_localhost = true,
+  $enable_ipv6_localhost = true,
+  $enable_fqdn_entry     = true,
   $fqdn_host_aliases     = $::hostname,
   $localhost_aliases     = ['localhost',
                             'localhost4',
                             'localhost4.localdomain4'],
   $localhost6_aliases    = ['localhost6',
                             'localhost6.localdomain6'],
-  $purge_hosts           = 'false',
+  $purge_hosts           = false,
   $target                = '/etc/hosts',
 ) {
 
-  case $enable_ipv4_localhost {
-    'true': {
+
+  # validate type and convert string to boolean if necessary
+  $enable_ipv4_localhost_type = type($enable_ipv4_localhost)
+  if $enable_ipv4_localhost_type == 'string' {
+    $ipv4_localhost_enabled = str2bool($enable_ipv4_localhost)
+  } else {
+    $ipv4_localhost_enabled = $enable_ipv4_localhost
+  }
+
+  # validate type and convert string to boolean if necessary
+  $enable_ipv6_localhost_type = type($enable_ipv6_localhost)
+  if $enable_ipv6_localhost_type == 'string' {
+    $ipv6_localhost_enabled = str2bool($enable_ipv6_localhost)
+  } else {
+    $ipv6_localhost_enabled = $enable_ipv6_localhost
+  }
+
+  # validate type and convert string to boolean if necessary
+  $enable_fqdn_entry_type = type($enable_fqdn_entry)
+  if $enable_fqdn_entry_type == 'string' {
+    $fqdn_entry_enabled = str2bool($enable_fqdn_entry)
+  } else {
+    $fqdn_entry_enabled = $enable_fqdn_entry
+  }
+
+  # validate type and convert string to boolean if necessary
+  $purge_hosts_type = type($purge_hosts)
+  if $purge_hosts_type == 'string' {
+    $purge_hosts_enabled = str2bool($purge_hosts)
+  } else {
+    $purge_hosts_enabled = $purge_hosts
+  }
+
+  case $ipv4_localhost_enabled {
+    true: {
       $localhost_ensure     = 'present'
       $localhost_ip         = '127.0.0.1'
       $my_localhost_aliases = $localhost_aliases
     }
-    'false': {
+    false: {
       $localhost_ensure     = 'absent'
       $localhost_ip         = '127.0.0.1'
       $my_localhost_aliases = ''
     }
     default: {
-      fail("hosts::enable_ipv4_localhost must be 'true' or 'false' and is ${enable_ipv4_localhost}")
+      fail("hosts::enable_ipv4_localhost must be true or false and is ${enable_ipv4_localhost}")
     }
   }
 
-  case $enable_ipv6_localhost {
-    'true': {
+  case $ipv6_localhost_enabled {
+    true: {
       $localhost6_ensure     = 'present'
       $localhost6_ip         = '::1'
       $my_localhost6_aliases = $localhost6_aliases
     }
-    'false': {
+    false: {
       $localhost6_ensure     = 'absent'
       $localhost6_ip         = '::1'
       $my_localhost6_aliases = undef
     }
     default: {
-      fail("hosts::enable_ipv6_localhost must be 'true' or 'false' and is ${enable_ipv6_localhost}")
+      fail("hosts::enable_ipv6_localhost must be true or false and is ${enable_ipv6_localhost}")
     }
   }
 
-  case $enable_fqdn_entry {
-    'true': {
+  case $fqdn_entry_enabled {
+    true: {
       $fqdn_ensure          = 'present'
       $my_fqdn_host_aliases = $fqdn_host_aliases
       $fqdn_ip              = $::ipaddress
     }
-    'false': {
-      $fqdn_ensure       = 'absent'
+    false: {
+      $fqdn_ensure          = 'absent'
       $my_fqdn_host_aliases = ''
-      $fqdn_ip           = ''
+      $fqdn_ip              = ''
     }
     default: {
-      fail("hosts::enable_fqdn_entry must be 'true' or 'false' and is ${enable_fqdn_entry}")
+      fail("hosts::enable_fqdn_entry must be true or false and is ${enable_fqdn_entry}")
     }
   }
 
@@ -122,10 +155,10 @@ class hosts (
     $fqdn_ip_real = $fqdn_ip
   }
 
-  case $purge_hosts {
-    'true','false': { }
+  case $purge_hosts_enabled {
+    true, false: { }
     default: {
-      fail("hosts::purge_hosts must be 'true' or 'false' and is ${purge_hosts}")
+      fail("hosts::purge_hosts must be true or false and is ${purge_hosts}")
     }
   }
 
