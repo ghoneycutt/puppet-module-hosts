@@ -54,3 +54,9 @@ target
 String for path to hosts file
 
 - *Default*: /etc/hosts
+
+collect_all
+-----------
+Boolean to optionally collect all the exported Host resources from puppetdb
+
+- *Default*: false 
