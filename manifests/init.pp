@@ -52,6 +52,12 @@
 #
 # - *Default*: /etc/hosts
 #
+# collect_all
+# -----------
+# Boolean to optionally collect all the exported Host resources from puppetdb
+#
+# - *Default*: false
+#
 class hosts (
   $enable_ipv4_localhost = true,
   $enable_ipv6_localhost = true,
