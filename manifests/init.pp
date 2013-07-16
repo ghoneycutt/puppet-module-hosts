@@ -64,6 +64,7 @@ class hosts (
                             'localhost6.localdomain6'],
   $purge_hosts           = false,
   $target                = '/etc/hosts',
+  $collect_all           = false,
 ) {
 
 
@@ -188,8 +189,16 @@ class hosts (
     ip           => $fqdn_ip_real,
   }
 
-  # only collect the exported entry above
-  Host <<| title == $::fqdn |>>
+  case $collect_all {
+    # collect all the exported Host resources
+    true:  {
+      Host <<| |>>
+    }
+    #  only collect the exported entry above
+    default: {
+      Host <<| title == $::fqdn |>>
+    }
+  }
 
   resources { 'host':
     purge => $purge_hosts,
