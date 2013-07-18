@@ -57,6 +57,6 @@ String for path to hosts file
 
 collect_all
 -----------
-Boolean to optionally collect all the exported Host resources from puppetdb
+Boolean to optionally collect all the exported Host resources
 
-- *Default*: false 
+- *Default*: false

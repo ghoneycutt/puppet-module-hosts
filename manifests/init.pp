@@ -54,11 +54,12 @@
 #
 # collect_all
 # -----------
-# Boolean to optionally collect all the exported Host resources from puppetdb
+# Boolean to optionally collect all the exported Host resources
 #
 # - *Default*: false
 #
 class hosts (
+  $collect_all           = false,
   $enable_ipv4_localhost = true,
   $enable_ipv6_localhost = true,
   $enable_fqdn_entry     = true,
@@ -70,9 +71,16 @@ class hosts (
                             'localhost6.localdomain6'],
   $purge_hosts           = false,
   $target                = '/etc/hosts',
-  $collect_all           = false,
 ) {
 
+
+  # validate type and convert string to boolean if necessary
+  $collect_all_type = type($collect_all)
+  if $collect_all_type == 'string' {
+    $collect_all_real = str2bool($collect_all)
+  } else {
+    $collect_all_real = $collect_all
+  }
 
   # validate type and convert string to boolean if necessary
   $enable_ipv4_localhost_type = type($enable_ipv4_localhost)
@@ -195,7 +203,7 @@ class hosts (
     ip           => $fqdn_ip_real,
   }
 
-  case $collect_all {
+  case $collect_all_real {
     # collect all the exported Host resources
     true:  {
       Host <<| |>>
