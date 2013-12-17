@@ -58,6 +58,19 @@
 #
 # - *Default*: false
 #
+# host_entries
+# ------------
+# Hash of host entries
+#
+# - *Default*: []
+#
+# - *Example*:
+# hosts::host_entries:
+#   'myhost.example.com':
+#     ip: '10.0.0.5'
+#     host_aliases:
+#       - 'myhost'
+
 class hosts (
   $collect_all           = false,
   $enable_ipv4_localhost = true,
@@ -71,6 +84,7 @@ class hosts (
                             'localhost6.localdomain6'],
   $purge_hosts           = false,
   $target                = '/etc/hosts',
+  $host_entries          = [],
 ) {
 
 
@@ -217,4 +231,6 @@ class hosts (
   resources { 'host':
     purge => $purge_hosts,
   }
+
+  create_resources(host,$host_entries)
 }
