@@ -84,7 +84,7 @@ class hosts (
                             'localhost6.localdomain6'],
   $purge_hosts           = false,
   $target                = '/etc/hosts',
-  $host_entries          = [],
+  $host_entries          = undef,
 ) {
 
 
@@ -232,5 +232,8 @@ class hosts (
     purge => $purge_hosts,
   }
 
-  create_resources(host,$host_entries)
+  if $host_entries != undef {
+    validate_hash($host_entries)
+    create_resources(host,$host_entries)
+  }
 }
