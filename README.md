@@ -60,3 +60,16 @@ collect_all
 Boolean to optionally collect all the exported Host resources
 
 - *Default*: false
+
+host_entries
+------------
+Hash of host entries
+
+- *Default*: []
+
+- *Example*:
+hosts::host_entries:
+  'myhost.example.com':
+    ip: '10.0.0.5'
+    host_aliases:
+      - 'myhost'
