@@ -65,11 +65,15 @@ host_entries
 ------------
 Hash of host entries
 
-- *Default*: []
+- *Default*: undef
 
-- *Example*:
+
+# Hiera example of host_entries
+<pre>
+---
 hosts::host_entries:
   'myhost.example.com':
     ip: '10.0.0.5'
     host_aliases:
       - 'myhost'
+</pre>

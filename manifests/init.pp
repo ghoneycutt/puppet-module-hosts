@@ -62,7 +62,7 @@
 # ------------
 # Hash of host entries
 #
-# - *Default*: []
+# - *Default*: undef
 #
 # - *Example*:
 # hosts::host_entries:
