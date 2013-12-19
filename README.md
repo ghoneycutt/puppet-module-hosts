@@ -1,11 +1,22 @@
-# hosts module #
+hosts module
+============
 
 Manage host entries.
 
 Can ensure entries for localhost, localhost6, and $::fqdn, including aliases
 and optionally purge unmanaged entries.
 
-# Parameters #
+[![Build Status](https://api.travis-ci.org/ghoneycutt/puppet-module-hosts.png?branch=master)](https://travis-ci.org/ghoneycutt/puppet-module-hosts)
+
+===
+
+# Compatibility
+
+This module targets Puppet v3. It should work with any *nix based system that uses `/etc/hosts`.
+
+===
+
+# Parameters
 
 enable_ipv4_localhost
 ---------------------
@@ -67,13 +78,14 @@ Hash of host entries
 
 - *Default*: undef
 
+===
 
 # Hiera example of host_entries
 <pre>
 ---
 hosts::host_entries:
-  'myhost.example.com':
+  'servicename.example.com':
     ip: '10.0.0.5'
     host_aliases:
-      - 'myhost'
+      - 'servicename'
 </pre>
