@@ -1,6 +1,7 @@
 ---
 env:
 - PUPPET_VERSION=3.3.2
+- PUPPET_VERSION=3.4.2
 notifications:
 email: false
 rvm:
