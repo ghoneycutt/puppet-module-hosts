@@ -59,6 +59,8 @@ describe 'hosts' do
           }
         }
 
+        it { should compile }
+
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
