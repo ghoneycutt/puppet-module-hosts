@@ -119,10 +119,12 @@ class hosts (
     ip           => $localhost6_ip,
   }
 
-  @@host { $::fqdn:
-    ensure       => $fqdn_ensure,
-    host_aliases => $my_fqdn_host_aliases,
-    ip           => $fqdn_ip,
+  if $fqdn_entry_enabled == true {
+    @@host { $::fqdn:
+      ensure       => $fqdn_ensure,
+      host_aliases => $my_fqdn_host_aliases,
+      ip           => $fqdn_ip,
+    }
   }
 
   case $collect_all_real {
