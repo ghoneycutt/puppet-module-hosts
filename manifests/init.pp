@@ -107,22 +107,28 @@ class hosts (
     ensure => 'absent',
   }
 
-  host { 'localhost.localdomain':
-    ensure       => $localhost_ensure,
-    host_aliases => $my_localhost_aliases,
-    ip           => $localhost_ip,
+  if $ipv4_localhost_enabled == true {
+    host { 'localhost.localdomain':
+      ensure       => $localhost_ensure,
+      host_aliases => $my_localhost_aliases,
+      ip           => $localhost_ip,
+    }
   }
 
-  host { 'localhost6.localdomain6':
-    ensure       => $localhost6_ensure,
-    host_aliases => $my_localhost6_aliases,
-    ip           => $localhost6_ip,
+  if $ipv6_localhost_enabled == true {
+    host { 'localhost6.localdomain6':
+      ensure       => $localhost6_ensure,
+      host_aliases => $my_localhost6_aliases,
+      ip           => $localhost6_ip,
+    }
   }
 
-  @@host { $::fqdn:
-    ensure       => $fqdn_ensure,
-    host_aliases => $my_fqdn_host_aliases,
-    ip           => $fqdn_ip,
+  if $fqdn_entry_enabled == true {
+    @@host { $::fqdn:
+      ensure       => $fqdn_ensure,
+      host_aliases => $my_fqdn_host_aliases,
+      ip           => $fqdn_ip,
+    }
   }
 
   case $collect_all_real {
