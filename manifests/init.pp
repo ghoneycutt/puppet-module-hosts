@@ -66,7 +66,7 @@ class hosts (
   } else {
     $localhost_ensure     = 'absent'
     $localhost_ip         = '127.0.0.1'
-    $my_localhost_aliases = ''
+    $my_localhost_aliases = undef
   }
 
   if $ipv6_localhost_enabled == true {
