@@ -464,6 +464,27 @@ describe 'hosts' do
     }
   end
 
+  context 'with host_entries containing post for fqdn' do
+    let(:facts) { { :fqdn => 'myhost.example.com',
+                    :ip   => '10.0.0.5',} }
+    let(:params) {
+      { :host_entries => {
+          'myhost.example.com' => {
+            'ip'           => '10.0.0.5',
+            'host_aliases' => 'myhost',
+          },
+        } } }
+    it {
+#  rspec-puppet does not yet support checking for exported resources
+#  checking if it can compile instead
+      should compile
+#      should contain_host('myhost.example.com').with({
+#        'ip' => '10.0.0.5',
+#        'host_aliases' => ['myhost',],
+#      })
+    }
+  end
+
   context 'with host specified as not of type hash' do
     let(:params) { { :keys => [ 'not', 'a', 'hash' ] } }
 
