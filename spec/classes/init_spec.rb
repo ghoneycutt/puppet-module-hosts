@@ -473,15 +473,24 @@ describe 'hosts' do
             'ip'           => '10.0.0.5',
             'host_aliases' => 'myhost',
           },
+          'anotherhost.example.com' => {
+            'ip'           => '10.0.0.6',
+            'host_aliases' => 'anotherhost',
+          },
         } } }
+
     it {
-#  rspec-puppet does not yet support checking for exported resources
-#  checking if it can compile instead
-      should compile
-#      should contain_host('myhost.example.com').with({
-#        'ip' => '10.0.0.5',
-#        'host_aliases' => ['myhost',],
-#      })
+      should_not contain_host('myhost.example.com').with({
+        'ip' => '10.0.0.5',
+        'host_aliases' => ['myhost',],
+      })
+    }
+
+    it {
+      should contain_host('anotherhost.example.com').with({
+        'ip' => '10.0.0.6',
+        'host_aliases' => ['anotherhost',],
+      })
     }
   end
 
