@@ -7,6 +7,7 @@ class hosts (
   $enable_ipv4_localhost = true,
   $enable_ipv6_localhost = true,
   $enable_fqdn_entry     = true,
+  $use_fqdn              = true,
   $fqdn_host_aliases     = $::hostname,
   $localhost_aliases     = ['localhost',
                             'localhost4',
@@ -119,20 +120,22 @@ class hosts (
     ip           => $localhost6_ip,
   }
 
-  @@host { $::fqdn:
-    ensure       => $fqdn_ensure,
-    host_aliases => $my_fqdn_host_aliases,
-    ip           => $fqdn_ip,
-  }
-
-  case $collect_all_real {
-    # collect all the exported Host resources
-    true:  {
-      Host <<| |>>
+  if $use_fqdn == true {
+    @@host { $::fqdn:
+      ensure       => $fqdn_ensure,
+      host_aliases => $my_fqdn_host_aliases,
+      ip           => $fqdn_ip,
     }
-    # only collect the exported entry above
-    default: {
-      Host <<| title == $::fqdn |>>
+
+    case $collect_all_real {
+      # collect all the exported Host resources
+      true:  {
+        Host <<| |>>
+      }
+      # only collect the exported entry above
+      default: {
+        Host <<| title == $::fqdn |>>
+      }
     }
   }
 
