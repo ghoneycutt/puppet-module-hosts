@@ -20,40 +20,35 @@ class hosts (
 
 
   # validate type and convert string to boolean if necessary
-  $collect_all_type = type($collect_all)
-  if $collect_all_type == 'string' {
+  if is_string($collect_all) {
     $collect_all_real = str2bool($collect_all)
   } else {
     $collect_all_real = $collect_all
   }
 
   # validate type and convert string to boolean if necessary
-  $enable_ipv4_localhost_type = type($enable_ipv4_localhost)
-  if $enable_ipv4_localhost_type == 'string' {
+  if is_string($enable_ipv4_localhost) {
     $ipv4_localhost_enabled = str2bool($enable_ipv4_localhost)
   } else {
     $ipv4_localhost_enabled = $enable_ipv4_localhost
   }
 
   # validate type and convert string to boolean if necessary
-  $enable_ipv6_localhost_type = type($enable_ipv6_localhost)
-  if $enable_ipv6_localhost_type == 'string' {
+  if is_string($enable_ipv6_localhost) {
     $ipv6_localhost_enabled = str2bool($enable_ipv6_localhost)
   } else {
     $ipv6_localhost_enabled = $enable_ipv6_localhost
   }
 
   # validate type and convert string to boolean if necessary
-  $enable_fqdn_entry_type = type($enable_fqdn_entry)
-  if $enable_fqdn_entry_type == 'string' {
+  if is_string($enable_fqdn_entry) {
     $fqdn_entry_enabled = str2bool($enable_fqdn_entry)
   } else {
     $fqdn_entry_enabled = $enable_fqdn_entry
   }
 
   # validate type and convert string to boolean if necessary
-  $purge_hosts_type = type($purge_hosts)
-  if $purge_hosts_type == 'string' {
+  if is_string($purge_hosts) {
     $purge_hosts_enabled = str2bool($purge_hosts)
   } else {
     $purge_hosts_enabled = $purge_hosts
@@ -79,14 +74,12 @@ class hosts (
     $my_localhost6_aliases = undef
   }
 
-  $my_localhost_aliases_type = type($my_localhost_aliases)
-  if $my_localhost_aliases_type != 'string' and $my_localhost_aliases_type != 'array' {
-    fail("hosts::localhost_aliases must be a string or an array. Detected type is <${my_localhost_aliases_type}>.")
+  if !(is_string($my_localhost_aliases) or is_array($my_localhost_aliases)) {
+    fail("hosts::localhost_aliases must be a string or an array.")
   }
 
-  $my_localhost6_aliases_type = type($my_localhost6_aliases)
-  if $my_localhost6_aliases_type != 'string' and $my_localhost6_aliases_type != 'array' {
-    fail("hosts::localhost6_aliases must be a string or an array. Detected type is <${my_localhost6_aliases_type}>.")
+  if !(is_string($my_localhost6_aliases) or is_array($my_localhost6_aliases)) {
+    fail("hosts::localhost6_aliases must be a string or an array.")
   }
 
   if $fqdn_entry_enabled == true {
