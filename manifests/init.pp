@@ -53,6 +53,14 @@ class hosts (
   }
 
   # validate type and convert string to boolean if necessary
+  $use_fqdn_type = type($use_fqdn)
+  if $use_fqdn_type == 'string' {
+    $use_fqdn_real = str2bool($use_fqdn)
+  } else {
+    $use_fqdn_real = $use_fqdn
+  }
+
+  # validate type and convert string to boolean if necessary
   $purge_hosts_type = type($purge_hosts)
   if $purge_hosts_type == 'string' {
     $purge_hosts_enabled = str2bool($purge_hosts)
@@ -120,7 +128,7 @@ class hosts (
     ip           => $localhost6_ip,
   }
 
-  if $use_fqdn == true {
+  if $use_fqdn_real == true {
     @@host { $::fqdn:
       ensure       => $fqdn_ensure,
       host_aliases => $my_fqdn_host_aliases,
