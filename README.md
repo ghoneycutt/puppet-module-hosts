@@ -36,6 +36,12 @@ Boolean to enable entry for fqdn
 
 - *Default*: true
 
+use_fqdn
+--------
+When enabled use the ${::fqdn} fact to determine the hosts entry for the local node.
+
+- *Default*: true
+
 fqdn_host_aliases
 -----------------
 String or Array of aliases for fqdn
