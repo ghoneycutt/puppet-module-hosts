@@ -2,7 +2,7 @@ name    'ghoneycutt-hosts'
 version '2.1.0'
 source 'git://github.com/ghoneycutt/puppet-module-hosts.git'
 author 'ghoneycutt'
-license 'Apache License, Version 2.0'
+license 'Apache-2.0'
 summary 'Manages host entries'
 description "Can ensure entries for localhost, localhost6, and $::fqdn,
 including aliases and optionally purge unmanaged entries."
