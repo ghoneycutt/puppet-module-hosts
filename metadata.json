@@ -1,4 +1,12 @@
 {
+  "name": "ghoneycutt-hosts",
+  "version": "2.2.0",
+  "author": "ghoneycutt",
+  "summary": "Manages host entries",
+  "license": "Apache-2.0",
+  "source": "git://github.com/ghoneycutt/puppet-module-hosts.git",
+  "project_page": "https://github.com/ghoneycutt/puppet-module-hosts",
+  "issues_url": "https://github.com/ghoneycutt/puppet-module-hosts/issues",
   "requirements": [
     {
       "name": "pe",
@@ -38,32 +46,11 @@
       "operatingsystem": "Ubuntu"
     }
   ],
-  "name": "ghoneycutt-hosts",
-  "version": "2.1.0",
-  "source": "git://github.com/ghoneycutt/puppet-module-hosts.git",
-  "author": "ghoneycutt",
-  "license": "Apache-2.0"
-  "summary": "Manages host entries",
   "description": "Can ensure entries for localhost, localhost6, and $::fqdn,\nincluding aliases and optionally purge unmanaged entries.",
-  "project_page": "https://github.com/ghoneycutt/puppet-module-hosts",
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 3.2.0"
-    }
-  ],
   "types": [
-
+  
   ],
-  "checksums": {
-    "Gemfile": "f184c7cca73bc8169572ab8c48e223bc",
-    "LICENSE": "567e6cc3941d464d60c74d1f4abd5f46",
-    "Modulefile": "23e22dfce928f3b4d78974af79d64c4a",
-    "README.md": "409911c21322853063ba3e9e75aed2bb",
-    "Rakefile": "1cb426d5b98cd8d27b9147563a78ab7c",
-    "manifests/init.pp": "d86f62e2f3f7ba129fb411862046221d",
-    "spec/classes/init_spec.rb": "ef5fc5741cef2e5289fa8397e1d13e89",
-    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc",
-    "tests/init.pp": "669ed02ca7363697bf7491d75e9ceac3"
-  }
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0"}
+  ]
 }
