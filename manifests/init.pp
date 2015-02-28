@@ -104,8 +104,8 @@ class hosts (
     $fqdn_ip              = $::ipaddress
   } else {
     $fqdn_ensure          = 'absent'
-    $my_fqdn_host_aliases = ''
-    $fqdn_ip              = ''
+    $my_fqdn_host_aliases = []
+    $fqdn_ip              = $::ipaddress
   }
 
   Host {
