@@ -1,5 +1,5 @@
 name    'ghoneycutt-hosts'
-version '2.2.1'
+version '2.2.2'
 source 'git://github.com/ghoneycutt/puppet-module-hosts.git'
 author 'ghoneycutt'
 license 'Apache-2.0'
