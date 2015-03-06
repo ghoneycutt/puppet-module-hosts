@@ -18,7 +18,7 @@ class hosts (
   $target                  = '/etc/hosts',
   $host_entries            = undef,
   $localhost_localdomain   = 'localhost.localdomain',
-  $localhost6_localdomain6 = '$localhost6_localdomain6',
+  $localhost6_localdomain6 = 'localhost6.localdomain6',
 ) {
 
 
