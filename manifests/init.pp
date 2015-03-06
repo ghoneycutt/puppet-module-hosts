@@ -3,20 +3,22 @@
 # Manage /etc/hosts
 #
 class hosts (
-  $collect_all           = false,
-  $enable_ipv4_localhost = true,
-  $enable_ipv6_localhost = true,
-  $enable_fqdn_entry     = true,
-  $use_fqdn              = true,
-  $fqdn_host_aliases     = $::hostname,
-  $localhost_aliases     = ['localhost',
-                            'localhost4',
-                            'localhost4.localdomain4'],
-  $localhost6_aliases    = ['localhost6',
-                            'localhost6.localdomain6'],
-  $purge_hosts           = false,
-  $target                = '/etc/hosts',
-  $host_entries          = undef,
+  $collect_all             = false,
+  $enable_ipv4_localhost   = true,
+  $enable_ipv6_localhost   = true,
+  $enable_fqdn_entry       = true,
+  $use_fqdn                = true,
+  $fqdn_host_aliases       = $::hostname,
+  $localhost_aliases       = ['localhost',
+                              'localhost4',
+                              'localhost4.localdomain4'],
+  $localhost6_aliases      = ['localhost6',
+                              'localhost6.localdomain6'],
+  $purge_hosts             = false,
+  $target                  = '/etc/hosts',
+  $host_entries            = undef,
+  $localhost_localdomain   = 'localhost.localdomain',
+  $localhost6_localdomain6 = '$localhost6_localdomain6',
 ) {
 
 
@@ -116,13 +118,13 @@ class hosts (
     ensure => 'absent',
   }
 
-  host { 'localhost.localdomain':
+  host { $localhost_localdomain :
     ensure       => $localhost_ensure,
     host_aliases => $my_localhost_aliases,
     ip           => $localhost_ip,
   }
 
-  host { 'localhost6.localdomain6':
+  host { $localhost6_localdomain6 :
     ensure       => $localhost6_ensure,
     host_aliases => $my_localhost6_aliases,
     ip           => $localhost6_ip,
