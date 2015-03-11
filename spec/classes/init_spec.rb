@@ -355,7 +355,7 @@ describe 'hosts' do
       it 'should fail' do
         expect {
           should contain_class('hosts')
-        }.to raise_error(Puppet::Error,/hosts::localhost_aliases must be a string or an array. Detected type is <boolean>./)
+        }.to raise_error(Puppet::Error,/hosts::localhost_aliases must be a string or an array./)
       end
     end
   end
@@ -447,7 +447,7 @@ describe 'hosts' do
       it 'should fail' do
         expect {
           should contain_class('hosts')
-        }.to raise_error(Puppet::Error,/hosts::localhost6_aliases must be a string or an array. Detected type is <boolean>./)
+        }.to raise_error(Puppet::Error,/hosts::localhost6_aliases must be a string or an array./)
       end
     end
   end
