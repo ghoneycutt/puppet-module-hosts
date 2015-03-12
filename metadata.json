@@ -1,6 +1,6 @@
 {
   "name": "ghoneycutt-hosts",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "author": "ghoneycutt",
   "summary": "Manages host entries",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": "3.2.x"
+      "version_requirement": "3.x"
     },
     {
       "name": "puppet",
