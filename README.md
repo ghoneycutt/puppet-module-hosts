@@ -12,7 +12,9 @@ and optionally purge unmanaged entries.
 
 # Compatibility
 
-This module targets Puppet v3 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0. It should work with any *nix based system that uses `/etc/hosts`.
+This module targets Puppet v3 (with and without the future parser) and Puppet
+v4 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0. It should work with any
+*nix based system that uses `/etc/hosts`.
 
 ===
 
