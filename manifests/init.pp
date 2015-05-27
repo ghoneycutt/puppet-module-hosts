@@ -83,11 +83,11 @@ class hosts (
   }
 
   if !is_string($my_localhost_aliases) and !is_array($my_localhost_aliases) {
-    fail("hosts::localhost_aliases must be a string or an array.")
+    fail('hosts::localhost_aliases must be a string or an array.')
   }
 
   if !is_string($my_localhost6_aliases) and !is_array($my_localhost6_aliases) {
-    fail("hosts::localhost6_aliases must be a string or an array.")
+    fail('hosts::localhost6_aliases must be a string or an array.')
   }
 
   if $fqdn_entry_enabled == true {
