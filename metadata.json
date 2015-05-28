@@ -1,8 +1,9 @@
 {
   "name": "ghoneycutt-hosts",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "author": "ghoneycutt",
   "summary": "Manages host entries",
+  "description": "Can ensure entries for localhost, localhost6, and $::fqdn,\nincluding aliases and optionally purge unmanaged entries.",
   "license": "Apache-2.0",
   "source": "git://github.com/ghoneycutt/puppet-module-hosts.git",
   "project_page": "https://github.com/ghoneycutt/puppet-module-hosts",
@@ -46,8 +47,7 @@
       "operatingsystem": "Ubuntu"
     }
   ],
-  "description": "Can ensure entries for localhost, localhost6, and $::fqdn,\nincluding aliases and optionally purge unmanaged entries.",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0 < 5.0.0"}
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0 < 6.0.0"}
   ]
 }
