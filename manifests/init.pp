@@ -91,6 +91,10 @@ class hosts (
     fail('hosts::localhost6_aliases must be a string or an array.')
   }
 
+  if !is_ip_address($fqdn_ip_address) {
+    fail('hosts::fqdn_ip_address must be an IP address')
+  }
+
   if $fqdn_entry_enabled == true {
     $fqdn_ensure          = 'present'
     $my_fqdn_host_aliases = $fqdn_host_aliases
