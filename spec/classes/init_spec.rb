@@ -1,5 +1,6 @@
 require 'spec_helper'
 describe 'hosts' do
+  let(:facts) { { :ipaddress => '10.1.2.3',} }
 
   it { should compile.with_all_deps }
 
@@ -264,6 +265,27 @@ describe 'hosts' do
 #        }
 
         it { should contain_resources('host').with({'purge' => 'false'}) }
+      end
+    end
+  end
+
+  describe 'with \'fqdn_ip_address\' parameter set to' do
+    context 'an invalid type (not ip address)' do
+      let(:params) { 
+        { :fqdn_ip_address => 'wrong.ip.address',
+        } 
+      }
+      let(:facts) {
+        { :hostname  => 'monkey',
+          :ipaddress => '10.1.2.3',
+          :fqdn      => 'monkey.example.com',
+        }
+      }
+
+      it 'should fail' do
+        expect {
+          should contain_class('hosts')
+        }.to raise_error(Puppet::Error,/hosts::fqdn_ip_address must be an IP address./)
       end
     end
   end
@@ -541,6 +563,7 @@ describe 'hosts' do
         'host_aliases' => ['myhost2','loghost'],
       },
     } } }
+    let(:facts) { { :ipaddress => '10.1.2.3' } }
 
     it {
       should contain_host('myhost.example.com').with({
@@ -558,8 +581,9 @@ describe 'hosts' do
   end
 
   context 'with host_entries containing post for fqdn' do
-    let(:facts) { { :fqdn => 'myhost.example.com',
-                    :ip   => '10.0.0.5',} }
+    let(:facts) { { :fqdn      => 'myhost.example.com',
+                    :ip        => '10.0.0.5',
+                    :ipaddress => '10.1.2.3',} }
     let(:params) {
       { :host_entries => {
           'myhost.example.com' => {

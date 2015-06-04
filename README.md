@@ -48,6 +48,12 @@ String or Array of aliases for fqdn
 
 - *Default*: $::hostname
 
+fqdn_ip_address
+---------------
+String with IP address for fqdn
+
+- *Default*: $::ipaddress
+
 localhost_aliases
 -----------------
 String or Array of aliases for localhost

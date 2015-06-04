@@ -9,6 +9,7 @@ class hosts (
   $enable_fqdn_entry     = true,
   $use_fqdn              = true,
   $fqdn_host_aliases     = $::hostname,
+  $fqdn_ip_address       = $::ipaddress,
   $localhost_aliases     = ['localhost',
                             'localhost4',
                             'localhost4.localdomain4'],
@@ -90,14 +91,18 @@ class hosts (
     fail('hosts::localhost6_aliases must be a string or an array.')
   }
 
+  if !is_ip_address($fqdn_ip_address) {
+    fail('hosts::fqdn_ip_address must be an IP address')
+  }
+
   if $fqdn_entry_enabled == true {
     $fqdn_ensure          = 'present'
     $my_fqdn_host_aliases = $fqdn_host_aliases
-    $fqdn_ip              = $::ipaddress
+    $fqdn_ip              = $fqdn_ip_address
   } else {
     $fqdn_ensure          = 'absent'
     $my_fqdn_host_aliases = []
-    $fqdn_ip              = $::ipaddress
+    $fqdn_ip              = $fqdn_ip_address
   }
 
   Host {
