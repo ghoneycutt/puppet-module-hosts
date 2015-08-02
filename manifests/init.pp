@@ -15,7 +15,6 @@ class hosts (
   $localhost6_aliases    = ['localhost6',
                             'localhost6.localdomain6'],
   $purge_hosts           = false,
-  $target                = '/etc/hosts',
   $host_entries          = undef,
 ) {
 
@@ -98,10 +97,6 @@ class hosts (
     $fqdn_ensure          = 'absent'
     $my_fqdn_host_aliases = []
     $fqdn_ip              = $::ipaddress
-  }
-
-  Host {
-    target => $target,
   }
 
   host { 'localhost':
