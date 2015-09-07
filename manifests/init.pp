@@ -108,6 +108,12 @@ class hosts (
     host_aliases => $my_localhost_aliases,
     ip           => $localhost_ip,
   }
+  
+  host { "${::fqdn}" :
+    ensure       => $localhost_ensure,
+    host_aliases => $my_fqdn_host_aliases,
+    ip           => '127.0.1.1',
+  }
 
   host { 'localhost6.localdomain6':
     ensure       => $localhost6_ensure,
@@ -116,9 +122,9 @@ class hosts (
   }
 
   if $use_fqdn_real == true {
-    @@host { $::fqdn:
+    @@host { "${::hostname}":
       ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
+      host_aliases => $::fqdn,
       ip           => $fqdn_ip,
     }
 
