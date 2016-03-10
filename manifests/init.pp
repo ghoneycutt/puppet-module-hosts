@@ -120,22 +120,15 @@ class hosts (
     ip           => $localhost6_ip,
   }
 
-  if $use_fqdn_real == true {
-    @@host { $::fqdn:
+  if $collect_all_real == true {
+    # collect all the exported Host resources
+    Host <<| |>>
+  } elsif $use_fqdn_real == true {
+    # avoid exported resource for fqdn
+    host { $::fqdn:
       ensure       => $fqdn_ensure,
       host_aliases => $my_fqdn_host_aliases,
       ip           => $fqdn_ip,
-    }
-
-    case $collect_all_real {
-      # collect all the exported Host resources
-      true:  {
-        Host <<| |>>
-      }
-      # only collect the exported entry above
-      default: {
-        Host <<| title == $::fqdn |>>
-      }
     }
   }
 
