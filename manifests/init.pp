@@ -120,8 +120,8 @@ class hosts (
     ip           => $localhost6_ip,
   }
 
+  # collect all the exported Host resources
   if $collect_all_real == true {
-    # collect all the exported Host resources
     if $enable_fqdn_entry == true {
       @@host { $::fqdn:
         ensure       => $fqdn_ensure,
@@ -130,13 +130,13 @@ class hosts (
       }
     }
     Host <<| |>>
-  } elsif $enable_fqdn_entry == true {
-    # avoid exported resource for fqdn
-    host { $::fqdn:
-      ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
-      ip           => $fqdn_ip,
-    }
+  }
+
+  # set fqdn based on current value of enable_fqdn_entry
+  host { $::fqdn:
+    ensure       => $fqdn_ensure,
+    host_aliases => $my_fqdn_host_aliases,
+    ip           => $fqdn_ip,
   }
 
   resources { 'host':
