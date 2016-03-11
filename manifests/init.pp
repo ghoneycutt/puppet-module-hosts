@@ -120,7 +120,6 @@ class hosts (
     ip           => $localhost6_ip,
   }
 
-  # collect all the exported Host resources
   if $collect_all_real == true {
     if $use_fqdn_real == true {
       @@host { $::fqdn:
@@ -131,7 +130,6 @@ class hosts (
     }
     Host <<| |>>
   } elsif $use_fqdn_real == true {
-    # just set fqdn based on local facts
     host { $::fqdn:
       ensure       => $fqdn_ensure,
       host_aliases => $my_fqdn_host_aliases,
