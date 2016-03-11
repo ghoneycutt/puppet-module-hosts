@@ -130,13 +130,13 @@ class hosts (
       }
     }
     Host <<| |>>
-  }
-
-  # set fqdn based on current value of enable_fqdn_entry
-  host { $::fqdn:
-    ensure       => $fqdn_ensure,
-    host_aliases => $my_fqdn_host_aliases,
-    ip           => $fqdn_ip,
+  } else {
+    # just set fqdn based on local facts
+    host { $::fqdn:
+      ensure       => $fqdn_ensure,
+      host_aliases => $my_fqdn_host_aliases,
+      ip           => $fqdn_ip,
+    }
   }
 
   resources { 'host':
