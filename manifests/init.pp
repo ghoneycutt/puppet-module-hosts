@@ -122,6 +122,13 @@ class hosts (
 
   if $collect_all_real == true {
     # collect all the exported Host resources
+    if $use_fqdn_real == true {
+      @@host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+      }
+    }
     Host <<| |>>
   } elsif $use_fqdn_real == true {
     # avoid exported resource for fqdn
