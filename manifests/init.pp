@@ -122,7 +122,7 @@ class hosts (
 
   if $collect_all_real == true {
     # collect all the exported Host resources
-    if $use_fqdn_real == true {
+    if $fqdn_entry_enabled == true {
       @@host { $::fqdn:
         ensure       => $fqdn_ensure,
         host_aliases => $my_fqdn_host_aliases,
@@ -130,7 +130,7 @@ class hosts (
       }
     }
     Host <<| |>>
-  } elsif $use_fqdn_real == true {
+  } elsif $fqdn_entry_enabled == true {
     # avoid exported resource for fqdn
     host { $::fqdn:
       ensure       => $fqdn_ensure,
