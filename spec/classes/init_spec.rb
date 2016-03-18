@@ -71,7 +71,7 @@ describe 'hosts' do
         it {
           should contain_host('localhost.localdomain').with({
             'ensure'       => 'absent',
-            'host_aliases' => '',
+            'host_aliases' => nil,
             'ip'           => '127.0.0.1',
             'target'       => '/etc/hosts',
           })
@@ -121,7 +121,7 @@ describe 'hosts' do
         it {
           should contain_host('localhost6.localdomain6').with({
             'ensure'       => 'absent',
-            'host_aliases' => '',
+            'host_aliases' => nil,
             'ip'           => '::1',
             'target'       => '/etc/hosts',
           })
