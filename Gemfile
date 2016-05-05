@@ -16,3 +16,7 @@ gem 'rspec-puppet', '~>1.0'
 if RUBY_VERSION >= '1.8.7' and RUBY_VERSION < '1.9'
   gem 'rspec', '~> 2.0'
 end
+
+# Work around Travis rake issue for Ruby version >= 1.9.3
+gem 'rake', '~> 10.5.0',      :require => false if RUBY_VERSION < '1.9.3'
+gem 'rake',                   :require => false if RUBY_VERSION >= '1.9.3' 
