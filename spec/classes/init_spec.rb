@@ -1,6 +1,7 @@
 require 'spec_helper'
 describe 'hosts' do
 
+  let(:facts) { { :ipaddress => '10.1.2.3' } }
   it { should compile.with_all_deps }
 
   context 'with default parameter settings' do
@@ -71,7 +72,7 @@ describe 'hosts' do
         it {
           should contain_host('localhost.localdomain').with({
             'ensure'       => 'absent',
-            'host_aliases' => '',
+            'host_aliases' => nil,
             'ip'           => '127.0.0.1',
             'target'       => '/etc/hosts',
           })
@@ -121,7 +122,7 @@ describe 'hosts' do
         it {
           should contain_host('localhost6.localdomain6').with({
             'ensure'       => 'absent',
-            'host_aliases' => '',
+            'host_aliases' => nil,
             'ip'           => '::1',
             'target'       => '/etc/hosts',
           })
@@ -531,7 +532,8 @@ describe 'hosts' do
   end
 
   context 'with hosts defined' do
-   let(:params) { { :host_entries => {
+    let(:facts) { { :ipaddress => '10.0.0.5' } }
+    let(:params) { { :host_entries => {
       'myhost.example.com' => {
         'ip' => '10.0.0.5',
         'host_aliases' => ['myhost'],
@@ -558,8 +560,8 @@ describe 'hosts' do
   end
 
   context 'with host_entries containing post for fqdn' do
-    let(:facts) { { :fqdn => 'myhost.example.com',
-                    :ip   => '10.0.0.5',} }
+    let(:facts) { { :fqdn       => 'myhost.example.com',
+                    :ipaddress  => '10.0.0.5',} }
     let(:params) {
       { :host_entries => {
           'myhost.example.com' => {
