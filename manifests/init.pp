@@ -4,6 +4,8 @@
 #
 class hosts (
   $collect_all           = false,
+  $collect_tag           = undef,
+  $export_tag            = undef,
   $enable_ipv4_localhost = true,
   $enable_ipv6_localhost = true,
   $enable_fqdn_entry     = true,
@@ -125,12 +127,17 @@ class hosts (
       ensure       => $fqdn_ensure,
       host_aliases => $my_fqdn_host_aliases,
       ip           => $fqdn_ip,
+      tag          => $export_tag,
     }
 
     case $collect_all_real {
       # collect all the exported Host resources
       true:  {
-        Host <<| |>>
+        if $collect_tag == undef {
+            Host <<| |>>
+        } else {
+            Host <<| tag == $collect_tag |>>
+        }
       }
       # only collect the exported entry above
       default: {
