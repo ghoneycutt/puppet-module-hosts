@@ -82,6 +82,18 @@ Boolean to optionally collect all the exported Host resources
 
 - *Default*: false
 
+collect_tag
+-----------
+String to filter the collection of exported Host resources.
+
+- *Default*: undef
+
+export_tag
+----------
+String or Array of tag(s) to attach to the exported Host resource.
+
+- *Default*: undef
+
 host_entries
 ------------
 Hash of host entries
