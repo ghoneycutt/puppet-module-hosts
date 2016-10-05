@@ -598,4 +598,31 @@ describe 'hosts' do
       }.to raise_error(Puppet::Error)
     end
   end
+
+  describe 'with \'collect_tag\' specified as not of type string' do
+    [true, false, { 'a' => 'b' }, [ 'a', 'b']].each do |collect_tag_value|
+      context "#{collect_tag_value}" do
+        let(:params) { { :collect_tag => collect_tag_value } }
+
+        it 'should fail' do
+          expect {
+            should contain_class('hosts')
+          }.to raise_error(Puppet::Error)
+        end
+      end
+    end
+  end
+  describe 'with \'export_tag\' specified as not of type string or array' do
+    [true, false, { 'a' => 'b' }].each do |export_tag_value|
+      context "#{export_tag_value}" do
+        let(:params) { { :export_tag => export_tag_value } }
+
+        it 'should fail' do
+          expect {
+            should contain_class('hosts')
+          }.to raise_error(Puppet::Error)
+        end
+      end
+    end
+  end
 end
