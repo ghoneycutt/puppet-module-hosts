@@ -12,7 +12,6 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
-Gemfile.lock
 
 # YARD artifacts
 .yardoc
@@ -22,10 +21,14 @@ doc/
 # Vim
 *.swp
 
+# Eclipse
+.project
+
 # OS X
 .DS_Store
 
 # Puppet
 coverage/
+spec/fixtures/manifests/*
 spec/fixtures/modules/*
-spec/fixtures
+Gemfile.lock
