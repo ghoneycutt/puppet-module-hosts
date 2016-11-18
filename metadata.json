@@ -1,6 +1,6 @@
 {
   "name": "ghoneycutt-hosts",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "author": "ghoneycutt",
   "summary": "Manages host entries",
   "description": "Can ensure entries for localhost, localhost6, and $::fqdn,\nincluding aliases and optionally purge unmanaged entries.",
