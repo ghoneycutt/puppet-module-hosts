@@ -8,6 +8,7 @@ class hosts (
   $enable_ipv6_localhost = true,
   $enable_fqdn_entry     = true,
   $use_fqdn              = true,
+  $use_stdlibplus        = false,
   $fqdn_host_aliases     = $::hostname,
   $localhost_aliases     = ['localhost',
                             'localhost4',
@@ -19,6 +20,11 @@ class hosts (
   $host_entries          = undef,
 ) {
 
+  if $use_stdlibplus == true {
+    $ipaddress = $::ipaddress_main_interface
+  } else {
+    $ipaddress = $::ipaddress
+  }
 
   # validate type and convert string to boolean if necessary
   if is_string($collect_all) {
@@ -93,11 +99,11 @@ class hosts (
   if $fqdn_entry_enabled == true {
     $fqdn_ensure          = 'present'
     $my_fqdn_host_aliases = $fqdn_host_aliases
-    $fqdn_ip              = $::ipaddress
+    $fqdn_ip              = $ipaddress
   } else {
     $fqdn_ensure          = 'absent'
     $my_fqdn_host_aliases = []
-    $fqdn_ip              = $::ipaddress
+    $fqdn_ip              = $ipaddress
   }
 
   Host {
