@@ -49,6 +49,53 @@ describe 'hosts' do
     it { should contain_resources('host').with({'purge' => 'false'}) }
   end
 
+  context 'with default parameter settings and stdlibplus' do
+    let(:params) { { :use_stdlibplus => true } }
+    let(:facts) {
+      { :hostname                 => 'monkey',
+        :ipaddress                => '10.1.2.3',
+        :ipaddress_main_interface => '10.3.2.1',
+        :fqdn                     => 'monkey.example.com',
+      }
+    }
+
+    it {
+      should contain_host('localhost').with({
+        'ensure' => 'absent',
+        'target' => '/etc/hosts',
+      })
+    }
+
+    it {
+      should contain_host('localhost.localdomain').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
+        'ip'           => '127.0.0.1',
+        'target'       => '/etc/hosts',
+      })
+    }
+
+    it {
+      should contain_host('localhost6.localdomain6').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+        'ip'           => '::1',
+        'target'       => '/etc/hosts',
+      })
+    }
+
+#    it {
+#      should contain_host('monkey.example.com').with({
+#        'ensure'      => 'present',
+#        'host_aliases' => ['monkey', 'monkey.example.com'],
+#        'ip'           => '10.3.2.1',
+#        'target'       => '/etc/hosts',
+#      })
+#    }
+
+    it { should contain_resources('host').with({'purge' => 'false'}) }
+  end
+
   describe 'with \'enable_ipv4_localhost\' parameter set to' do
     [false, 'false'].each do |enable_ipv4_localhost_value|
       context "#{enable_ipv4_localhost_value}" do

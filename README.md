@@ -46,6 +46,12 @@ When enabled use the ${::fqdn} fact to determine the hosts entry for the local n
 
 - *Default*: true
 
+use_stdlibplus
+--------------
+When enabled use stdlibplus'es fact ipaddress_main_interface instead of ipaddress, taking into consideration set default routes.
+
+- *Default*: false
+
 fqdn_host_aliases
 -----------------
 String or Array of aliases for fqdn
