@@ -133,21 +133,11 @@ class hosts (
   }
 
   if $use_fqdn_real == true {
-    # the Host resource is duplicated because in certain combinations
-    # of Ruby and Puppet it's not possible to have an empty/undef tag
-    if $export_tag == undef {
-      @@host { $::fqdn:
-        ensure       => $fqdn_ensure,
-        host_aliases => $my_fqdn_host_aliases,
-        ip           => $fqdn_ip,
-      }
-    } else {
-      @@host { $::fqdn:
-        ensure       => $fqdn_ensure,
-        host_aliases => $my_fqdn_host_aliases,
-        ip           => $fqdn_ip,
-        tag          => $export_tag,
-      }
+    @@host { $::fqdn:
+      ensure       => $fqdn_ensure,
+      host_aliases => $my_fqdn_host_aliases,
+      ip           => $fqdn_ip,
+      tag          => $export_tag,
     }
 
     case $collect_all_real {

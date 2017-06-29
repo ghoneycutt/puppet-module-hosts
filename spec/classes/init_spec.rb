@@ -40,6 +40,7 @@ describe 'hosts' do
         'ensure'       => 'present',
         'host_aliases' => ['monkey'],
         'ip'           => '10.1.2.3',
+        'tag'          => nil,
       })
     }
 
@@ -229,6 +230,7 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['monkey'],
             'ip'           => '10.1.2.3',
+            'tag'          => nil,
           })
         }
 
