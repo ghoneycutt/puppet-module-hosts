@@ -37,14 +37,13 @@ describe 'hosts' do
       })
     }
 
-#    # GH: rspec-puppet does not yet support checking for exported resources
-#    it {
-#      should contain_host('monkey.example.com').with({
-#        'ensure'       => 'present',
-#        'host_aliases' => ['monkey'],
-#        'ip'           => '10.1.2.3',
-#      })
-#    }
+    it {
+      expect(exported_resources).to contain_host('monkey.example.com').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['monkey'],
+        'ip'           => '10.1.2.3',
+      })
+    }
 
     it { should contain_resources('host').with({'purge' => 'false'}) }
   end
@@ -214,6 +213,8 @@ describe 'hosts' do
 
         it { should_not contain_host('monkey.example.com') }
 
+        it { expect(exported_resources).not_to contain_host('monkey.example.com') }
+
         it { should contain_resources('host').with({'purge' => 'false'}) }
       end
     end
@@ -255,14 +256,13 @@ describe 'hosts' do
           })
         }
 
-#        # GH: rspec-puppet does not yet support checking for exported resources
-#        it {
-#          should contain_host('monkey.example.com').with({
-#            'ensure'       => 'present',
-#            'host_aliases' => ['monkey'],
-#            'ip'           => '10.1.2.3',
-#          })
-#        }
+        it {
+          expect(exported_resources).to contain_host('monkey.example.com').with({
+            'ensure'       => 'present',
+            'host_aliases' => ['monkey'],
+            'ip'           => '10.1.2.3',
+          })
+        }
 
         it { should contain_resources('host').with({'purge' => 'false'}) }
       end
