@@ -4,6 +4,8 @@
 #
 class hosts (
   $collect_all           = false,
+  $collect_tag           = undef,
+  $export_tag            = undef,
   $enable_ipv4_localhost = true,
   $enable_ipv6_localhost = true,
   $enable_fqdn_entry     = true,
@@ -25,6 +27,16 @@ class hosts (
     $collect_all_real = str2bool($collect_all)
   } else {
     $collect_all_real = $collect_all
+  }
+
+  # validate type
+  if $collect_tag != undef and !is_string($collect_tag) {
+    fail('hosts::collect_tag must be a string.')
+  }
+
+  # validate type
+  if $export_tag != undef and !is_string($export_tag) and !is_array($export_tag) {
+    fail('hosts::export_tag must be a string or an array.')
   }
 
   # validate type and convert string to boolean if necessary
@@ -121,16 +133,31 @@ class hosts (
   }
 
   if $use_fqdn_real == true {
-    @@host { $::fqdn:
-      ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
-      ip           => $fqdn_ip,
+    # the Host resource is duplicated because in certain combinations
+    # of Ruby and Puppet it's not possible to have an empty/undef tag
+    if $export_tag == undef {
+      @@host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+      }
+    } else {
+      @@host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+        tag          => $export_tag,
+      }
     }
 
     case $collect_all_real {
       # collect all the exported Host resources
       true:  {
-        Host <<| |>>
+        if $collect_tag == undef {
+            Host <<| |>>
+        } else {
+            Host <<| tag == $collect_tag |>>
+        }
       }
       # only collect the exported entry above
       default: {
