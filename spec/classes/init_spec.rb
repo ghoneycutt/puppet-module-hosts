@@ -1,17 +1,15 @@
 require 'spec_helper'
 describe 'hosts' do
 
-  let(:facts) { { :ipaddress => '10.1.2.3' } }
+  let(:facts) {
+    { :hostname  => 'monkey',
+      :ipaddress => '10.1.2.3',
+      :fqdn      => 'monkey.example.com',
+    }
+  }
   it { should compile.with_all_deps }
 
   context 'with default parameter settings' do
-    let(:facts) {
-      { :hostname  => 'monkey',
-        :ipaddress => '10.1.2.3',
-        :fqdn      => 'monkey.example.com',
-      }
-    }
-
     it {
       should contain_host('localhost').with({
         'ensure' => 'absent',
@@ -52,12 +50,6 @@ describe 'hosts' do
     [false, 'false'].each do |enable_ipv4_localhost_value|
       context "#{enable_ipv4_localhost_value}" do
         let(:params) { { :enable_ipv4_localhost => enable_ipv4_localhost_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it { should compile }
 
@@ -95,12 +87,6 @@ describe 'hosts' do
     [false, 'false'].each do |enable_ipv6_localhost_value|
       context "#{enable_ipv6_localhost_value}" do
         let(:params) { { :enable_ipv6_localhost => enable_ipv6_localhost_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
@@ -136,12 +122,6 @@ describe 'hosts' do
     [false, 'false'].each do |enable_fqdn_entry_value|
       context "#{enable_fqdn_entry_value}" do
         let(:params) { { :enable_fqdn_entry => enable_fqdn_entry_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
@@ -179,12 +159,6 @@ describe 'hosts' do
     [false, 'false'].each do |use_fqdn_value|
       context "#{use_fqdn_value}" do
         let(:params) { { :use_fqdn => use_fqdn_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
@@ -224,12 +198,6 @@ describe 'hosts' do
     [true,'true'].each do |use_fqdn_value|
       context "#{use_fqdn_value}" do
         let(:params) { { :use_fqdn => use_fqdn_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
@@ -272,12 +240,6 @@ describe 'hosts' do
   describe 'with \'localhost_aliases\' parameter set to' do
     context 'single value' do
       let(:params) { { :localhost_aliases => 'home' } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it {
         should contain_host('localhost').with({
@@ -309,12 +271,6 @@ describe 'hosts' do
 
     context 'an array' do
       let(:params) { { :localhost_aliases => ['home','home.mydomain'] } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it {
         should contain_host('localhost').with({
@@ -346,12 +302,6 @@ describe 'hosts' do
 
     context 'an invalid type (not array or string)' do
       let(:params) { { :localhost_aliases => true } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it 'should fail' do
         expect {
@@ -364,12 +314,6 @@ describe 'hosts' do
   describe 'with \'localhost6_aliases\' parameter set to' do
     context 'single value' do
       let(:params) { { :localhost6_aliases => 'home6' } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it {
         should contain_host('localhost').with({
@@ -401,12 +345,6 @@ describe 'hosts' do
 
     context 'an array' do
       let(:params) { { :localhost6_aliases => ['home6','home6.mydomain'] } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it {
         should contain_host('localhost').with({
@@ -438,12 +376,6 @@ describe 'hosts' do
 
     context 'an invalid type (not array or string)' do
       let(:params) { { :localhost6_aliases => true } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it 'should fail' do
         expect {
@@ -457,12 +389,6 @@ describe 'hosts' do
     [true, 'true'].each do |purge_hosts_value|
       context "#{purge_hosts_value}" do
         let(:params) { { :purge_hosts => purge_hosts_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
@@ -496,12 +422,6 @@ describe 'hosts' do
 
   context 'with \'target\' parameter specified' do
     let(:params) { { :target => '/usr/local/etc/hosts' } }
-    let(:facts) {
-      { :hostname  => 'monkey',
-        :ipaddress => '10.1.2.3',
-        :fqdn      => 'monkey.example.com',
-      }
-    }
 
     it {
       should contain_host('localhost').with({
@@ -599,28 +519,45 @@ describe 'hosts' do
     end
   end
 
-  describe 'with \'collect_tag\' specified as not of type string' do
-    [true, false, { 'a' => 'b' }, [ 'a', 'b']].each do |collect_tag_value|
-      context "#{collect_tag_value}" do
-        let(:params) { { :collect_tag => collect_tag_value } }
+  describe "with 'collect_tag'" do
+    context 'specified as not of type string' do
+      [true, false, { 'a' => 'b' }, [ 'a', 'b']].each do |collect_tag_value|
+        context "#{collect_tag_value}" do
+          let(:params) { { :collect_tag => collect_tag_value } }
 
-        it 'should fail' do
-          expect {
-            should contain_class('hosts')
-          }.to raise_error(Puppet::Error)
+          it 'should fail' do
+            expect {
+              should contain_class('hosts')
+            }.to raise_error(Puppet::Error, /must be a string/)
+          end
         end
       end
     end
   end
-  describe 'with \'export_tag\' specified as not of type string or array' do
-    [true, false, { 'a' => 'b' }].each do |export_tag_value|
-      context "#{export_tag_value}" do
-        let(:params) { { :export_tag => export_tag_value } }
 
-        it 'should fail' do
-          expect {
-            should contain_class('hosts')
-          }.to raise_error(Puppet::Error)
+  describe "with 'export_tag'" do
+    context 'specified as a string' do
+      let(:params) { { :export_tag => 'mytag' } }
+
+      it { expect(exported_resources).to contain_host('monkey.example.com').with_tag('mytag') }
+    end
+
+    context 'specified as an array' do
+      let(:params) { { :export_tag => ['mytag1', 'mytag2'] } }
+
+      it { expect(exported_resources).to contain_host('monkey.example.com').with_tag(['mytag1', 'mytag2']) }
+    end
+
+    context 'specified as not of type string or array' do
+      [true, false, { 'a' => 'b' }].each do |export_tag_value|
+        context "#{export_tag_value}" do
+          let(:params) { { :export_tag => export_tag_value } }
+
+          it 'should fail' do
+            expect {
+              should contain_class('hosts')
+            }.to raise_error(Puppet::Error, /must be a string or an array/)
+          end
         end
       end
     end
