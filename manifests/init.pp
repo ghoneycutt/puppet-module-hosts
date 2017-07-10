@@ -135,7 +135,6 @@ class hosts (
         host_aliases => $my_fqdn_host_aliases,
         ip           => $fqdn_ip,
       }
-  
       case $collect_all_real {
         # collect all the exported Host resources
         true:  {
