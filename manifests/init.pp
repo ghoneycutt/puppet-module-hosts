@@ -3,66 +3,21 @@
 # Manage /etc/hosts
 #
 class hosts (
-  $collect_all           = false,
-  $enable_ipv4_localhost = true,
-  $enable_ipv6_localhost = true,
-  $enable_fqdn_entry     = true,
-  $use_fqdn              = true,
-  $fqdn_host_aliases     = $::hostname,
-  $localhost_aliases     = ['localhost',
-                            'localhost4',
-                            'localhost4.localdomain4'],
-  $localhost6_aliases    = ['localhost6',
-                            'localhost6.localdomain6'],
-  $purge_hosts           = false,
-  $target                = '/etc/hosts',
-  $host_entries          = undef,
+  Boolean $enable_ipv4_localhost = true,
+  Boolean $enable_ipv6_localhost = true,
+  Boolean $enable_fqdn_entry = true,
+  Variant[String, Array[String, 1]] $fqdn_host_aliases = $::hostname,
+  Array[String, 1] $localhost_aliases = ['localhost.localdomain',
+                                          'localhost4',
+                                          'localhost4.localdomain4'],
+  Array[String, 1] $localhost6_aliases = ['localhost6.localdomain6'],
+  Boolean $purge_hosts = false,
+  Stdlib::Absolutepath $target = '/etc/hosts',
+  Variant[Undef, Hash] $host_entries = undef,
+  IP::Address $fqdn_ip = $::ipaddress,
 ) {
 
-
-  # validate type and convert string to boolean if necessary
-  if is_string($collect_all) {
-    $collect_all_real = str2bool($collect_all)
-  } else {
-    $collect_all_real = $collect_all
-  }
-
-  # validate type and convert string to boolean if necessary
-  if is_string($enable_ipv4_localhost) {
-    $ipv4_localhost_enabled = str2bool($enable_ipv4_localhost)
-  } else {
-    $ipv4_localhost_enabled = $enable_ipv4_localhost
-  }
-
-  # validate type and convert string to boolean if necessary
-  if is_string($enable_ipv6_localhost) {
-    $ipv6_localhost_enabled = str2bool($enable_ipv6_localhost)
-  } else {
-    $ipv6_localhost_enabled = $enable_ipv6_localhost
-  }
-
-  # validate type and convert string to boolean if necessary
-  if is_string($enable_fqdn_entry) {
-    $fqdn_entry_enabled = str2bool($enable_fqdn_entry)
-  } else {
-    $fqdn_entry_enabled = $enable_fqdn_entry
-  }
-
-  # validate type and convert string to boolean if necessary
-  if is_string($use_fqdn) {
-    $use_fqdn_real = str2bool($use_fqdn)
-  } else {
-    $use_fqdn_real = $use_fqdn
-  }
-
-  # validate type and convert string to boolean if necessary
-  if is_string($purge_hosts) {
-    $purge_hosts_enabled = str2bool($purge_hosts)
-  } else {
-    $purge_hosts_enabled = $purge_hosts
-  }
-
-  if $ipv4_localhost_enabled == true {
+  if $enable_ipv4_localhost == true {
     $localhost_ensure     = 'present'
     $localhost_ip         = '127.0.0.1'
     $my_localhost_aliases = $localhost_aliases
@@ -72,7 +27,7 @@ class hosts (
     $my_localhost_aliases = undef
   }
 
-  if $ipv6_localhost_enabled == true {
+  if $enable_ipv6_localhost == true {
     $localhost6_ensure     = 'present'
     $localhost6_ip         = '::1'
     $my_localhost6_aliases = $localhost6_aliases
@@ -82,70 +37,56 @@ class hosts (
     $my_localhost6_aliases = undef
   }
 
-  if !is_string($my_localhost_aliases) and !is_array($my_localhost_aliases) {
-    fail('hosts::localhost_aliases must be a string or an array.')
-  }
-
-  if !is_string($my_localhost6_aliases) and !is_array($my_localhost6_aliases) {
-    fail('hosts::localhost6_aliases must be a string or an array.')
-  }
-
-  if $fqdn_entry_enabled == true {
+  if $enable_fqdn_entry == true {
     $fqdn_ensure          = 'present'
     $my_fqdn_host_aliases = $fqdn_host_aliases
-    $fqdn_ip              = $::ipaddress
   } else {
     $fqdn_ensure          = 'absent'
     $my_fqdn_host_aliases = []
-    $fqdn_ip              = $::ipaddress
   }
 
-  Host {
-    target => $target,
+  $host_defaults = {
+    'target' => $target,
   }
 
-  host { 'localhost':
-    ensure => 'absent',
+
+#  host { 'localhost':
+#    ensure => 'absent',
+#    *      => $host_defaults,
+#  }
+
+#  host { 'localhost':
+#    ensure       => $localhost_ensure,
+#    host_aliases => $my_localhost_aliases,
+#    ip           => $localhost_ip,
+#    *            => $host_defaults,
+#  }
+#
+#  host { 'localhost6':
+#    ensure       => $localhost6_ensure,
+#    host_aliases => $my_localhost6_aliases,
+#    ip           => $localhost6_ip,
+#    *            => $host_defaults,
+#  }
+
+  host { $::fqdn:
+    ensure       => $fqdn_ensure,
+    host_aliases => $my_fqdn_host_aliases,
+    ip           => $fqdn_ip,
+    *            => $host_defaults,
   }
 
-  host { 'localhost.localdomain':
-    ensure       => $localhost_ensure,
-    host_aliases => $my_localhost_aliases,
-    ip           => $localhost_ip,
-  }
-
-  host { 'localhost6.localdomain6':
-    ensure       => $localhost6_ensure,
-    host_aliases => $my_localhost6_aliases,
-    ip           => $localhost6_ip,
-  }
-
-  if $use_fqdn_real == true {
-    @@host { $::fqdn:
-      ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
-      ip           => $fqdn_ip,
-    }
-
-    case $collect_all_real {
-      # collect all the exported Host resources
-      true:  {
-        Host <<| |>>
-      }
-      # only collect the exported entry above
-      default: {
-        Host <<| title == $::fqdn |>>
-      }
-    }
-  }
-
-  resources { 'host':
-    purge => $purge_hosts,
-  }
+#  resources { 'host':
+#    purge => $purge_hosts,
+#  }
 
   if $host_entries != undef {
-    $host_entries_real = delete($host_entries,$::fqdn)
-    validate_hash($host_entries_real)
-    create_resources(host,$host_entries_real)
+    $_host_entries = delete($host_entries,$::fqdn)
+
+    $_host_entries.each |$k,$v| {
+      host { $k:
+        * => $v,
+      }
+    }
   }
 }

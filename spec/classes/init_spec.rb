@@ -38,18 +38,18 @@ describe 'hosts' do
     }
 
     it {
-      expect(exported_resources).to contain_host('monkey.example.com').with({
+      should contain_host('monkey.example.com').with({
         'ensure'       => 'present',
         'host_aliases' => ['monkey'],
         'ip'           => '10.1.2.3',
       })
     }
 
-    it { should contain_resources('host').with({'purge' => 'false'}) }
+    it { should contain_resources('host').with({'purge' => false}) }
   end
 
   describe 'with \'enable_ipv4_localhost\' parameter set to' do
-    [false, 'false'].each do |enable_ipv4_localhost_value|
+    [false].each do |enable_ipv4_localhost_value|
       context "#{enable_ipv4_localhost_value}" do
         let(:params) { { :enable_ipv4_localhost => enable_ipv4_localhost_value } }
         let(:facts) {
@@ -86,13 +86,13 @@ describe 'hosts' do
           })
         }
 
-        it { should contain_resources('host').with({'purge' => 'false'}) }
+        it { should contain_resources('host').with({'purge' => false}) }
       end
     end
   end
 
   describe 'with \'enable_ipv6_localhost\' parameter set to' do
-    [false, 'false'].each do |enable_ipv6_localhost_value|
+    [false].each do |enable_ipv6_localhost_value|
       context "#{enable_ipv6_localhost_value}" do
         let(:params) { { :enable_ipv6_localhost => enable_ipv6_localhost_value } }
         let(:facts) {
@@ -127,13 +127,13 @@ describe 'hosts' do
           })
         }
 
-        it { should contain_resources('host').with({'purge' => 'false'}) }
+        it { should contain_resources('host').with({'purge' => false}) }
       end
     end
   end
 
   describe 'with \'enable_fqdn_entry\' parameter set to' do
-    [false, 'false'].each do |enable_fqdn_entry_value|
+    [false].each do |enable_fqdn_entry_value|
       context "#{enable_fqdn_entry_value}" do
         let(:params) { { :enable_fqdn_entry => enable_fqdn_entry_value } }
         let(:facts) {
@@ -168,15 +168,22 @@ describe 'hosts' do
           })
         }
 
-        it { should_not contain_host('monkey.example.com') }
+        it {
+          should contain_host('monkey.example.com').with({
+            'ensure'       => 'absent',
+            'host_aliases' => [],
+            'ip'           => '10.1.2.3',
+            'target'       => '/etc/hosts',
+          })
+        }
 
-        it { should contain_resources('host').with({'purge' => 'false'}) }
+        it { should contain_resources('host').with({'purge' => false}) }
       end
     end
   end
 
   describe 'with \'use_fqdn\' parameter set to' do
-    [false, 'false'].each do |use_fqdn_value|
+    [false].each do |use_fqdn_value|
       context "#{use_fqdn_value}" do
         let(:params) { { :use_fqdn => use_fqdn_value } }
         let(:facts) {
@@ -213,15 +220,13 @@ describe 'hosts' do
 
         it { should_not contain_host('monkey.example.com') }
 
-        it { expect(exported_resources).not_to contain_host('monkey.example.com') }
-
-        it { should contain_resources('host').with({'purge' => 'false'}) }
+        it { should contain_resources('host').with({'purge' => false}) }
       end
     end
   end
 
   describe 'with \'use_fqdn\' parameter set to' do
-    [true,'true'].each do |use_fqdn_value|
+    [true].each do |use_fqdn_value|
       context "#{use_fqdn_value}" do
         let(:params) { { :use_fqdn => use_fqdn_value } }
         let(:facts) {
@@ -257,56 +262,69 @@ describe 'hosts' do
         }
 
         it {
-          expect(exported_resources).to contain_host('monkey.example.com').with({
+          should contain_host('monkey.example.com').with({
             'ensure'       => 'present',
             'host_aliases' => ['monkey'],
             'ip'           => '10.1.2.3',
           })
         }
 
-        it { should contain_resources('host').with({'purge' => 'false'}) }
+        it { should contain_resources('host').with({'purge' => false}) }
+      end
+
+      context 'and fqdn_ip specified' do
+        let(:params) {
+          {
+            :use_fqdn => use_fqdn_value,
+            :fqdn_ip  => '10.10.20.30',
+          }
+        }
+        let(:facts) {
+          { :hostname  => 'monkey',
+            :ipaddress => '10.1.2.3',
+            :fqdn      => 'monkey.example.com',
+          }
+        }
+
+        it {
+          should contain_host('localhost').with({
+            'ensure' => 'absent',
+            'target' => '/etc/hosts',
+          })
+        }
+
+        it {
+          should contain_host('localhost.localdomain').with({
+            'ensure'       => 'present',
+            'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
+            'ip'           => '127.0.0.1',
+            'target'       => '/etc/hosts',
+          })
+        }
+
+        it {
+          should contain_host('localhost6.localdomain6').with({
+            'ensure'       => 'present',
+            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+            'ip'           => '::1',
+            'target'       => '/etc/hosts',
+          })
+        }
+
+        it {
+          should contain_host('monkey.example.com').with({
+            'ensure'       => 'present',
+            'host_aliases' => ['monkey'],
+            'ip'           => '10.10.20.30',
+          })
+        }
+
+        it { should contain_resources('host').with({'purge' => false}) }
       end
     end
   end
 
   describe 'with \'localhost_aliases\' parameter set to' do
-    context 'single value' do
-      let(:params) { { :localhost_aliases => 'home' } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
-
-      it {
-        should contain_host('localhost').with({
-          'ensure' => 'absent',
-          'target' => '/etc/hosts',
-        })
-      }
-
-      it {
-        should contain_host('localhost.localdomain').with({
-          'ensure'       => 'present',
-          'host_aliases' => 'home',
-          'ip'           => '127.0.0.1',
-          'target'       => '/etc/hosts',
-        })
-      }
-
-      it {
-        should contain_host('localhost6.localdomain6').with({
-          'ensure'       => 'present',
-          'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
-          'ip'           => '::1',
-          'target'       => '/etc/hosts',
-        })
-      }
-
-      it { should contain_resources('host').with({'purge' => 'false'}) }
-    end
-
     context 'an array' do
       let(:params) { { :localhost_aliases => ['home','home.mydomain'] } }
       let(:facts) {
@@ -341,7 +359,7 @@ describe 'hosts' do
         })
       }
 
-      it { should contain_resources('host').with({'purge' => 'false'}) }
+      it { should contain_resources('host').with({'purge' => false}) }
     end
 
     context 'an invalid type (not array or string)' do
@@ -356,49 +374,12 @@ describe 'hosts' do
       it 'should fail' do
         expect {
           should contain_class('hosts')
-        }.to raise_error(Puppet::Error,/hosts::localhost_aliases must be a string or an array./)
+        }.to raise_error(Puppet::Error,/Error while evaluating a Resource Statement/)
       end
     end
   end
 
   describe 'with \'localhost6_aliases\' parameter set to' do
-    context 'single value' do
-      let(:params) { { :localhost6_aliases => 'home6' } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
-
-      it {
-        should contain_host('localhost').with({
-          'ensure' => 'absent',
-          'target' => '/etc/hosts',
-        })
-      }
-
-      it {
-        should contain_host('localhost.localdomain').with({
-          'ensure'       => 'present',
-          'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
-          'ip'           => '127.0.0.1',
-          'target'       => '/etc/hosts',
-        })
-      }
-
-      it {
-        should contain_host('localhost6.localdomain6').with({
-          'ensure'       => 'present',
-          'host_aliases' => 'home6',
-          'ip'           => '::1',
-          'target'       => '/etc/hosts',
-        })
-      }
-
-      it { should contain_resources('host').with({'purge' => 'false'}) }
-    end
-
     context 'an array' do
       let(:params) { { :localhost6_aliases => ['home6','home6.mydomain'] } }
       let(:facts) {
@@ -433,7 +414,7 @@ describe 'hosts' do
         })
       }
 
-      it { should contain_resources('host').with({'purge' => 'false'}) }
+      it { should contain_resources('host').with({'purge' => false}) }
     end
 
     context 'an invalid type (not array or string)' do
@@ -448,13 +429,13 @@ describe 'hosts' do
       it 'should fail' do
         expect {
           should contain_class('hosts')
-        }.to raise_error(Puppet::Error,/hosts::localhost6_aliases must be a string or an array./)
+        }.to raise_error(Puppet::Error,/Error while evaluating a Resource Statement/)
       end
     end
   end
 
   describe 'with \'purge_hosts\' parameter set to' do
-    [true, 'true'].each do |purge_hosts_value|
+    [true].each do |purge_hosts_value|
       context "#{purge_hosts_value}" do
         let(:params) { { :purge_hosts => purge_hosts_value } }
         let(:facts) {
@@ -489,7 +470,7 @@ describe 'hosts' do
           })
         }
 
-        it { should contain_resources('host').with({'purge' => 'true'}) }
+        it { should contain_resources('host').with({'purge' => true}) }
       end
     end
   end
@@ -528,7 +509,7 @@ describe 'hosts' do
       })
     }
 
-    it { should contain_resources('host').with({'purge' => 'false'}) }
+    it { should contain_resources('host').with({'purge' => false}) }
   end
 
   context 'with hosts defined' do
@@ -589,13 +570,13 @@ describe 'hosts' do
     }
   end
 
-  context 'with host specified as not of type hash' do
-    let(:params) { { :keys => [ 'not', 'a', 'hash' ] } }
+  context 'with host_entries specified as not of type hash' do
+    let(:params) { { :host_entries => [ 'not', 'a', 'hash' ] } }
 
     it 'should fail' do
       expect {
         should contain_class('hosts')
-      }.to raise_error(Puppet::Error)
+      }.to raise_error(Puppet::Error,/Error while evaluating a Resource Statement/)
     end
   end
 end
