@@ -17,6 +17,7 @@ class hosts (
   $purge_hosts           = false,
   $target                = '/etc/hosts',
   $host_entries          = undef,
+  $export_host_resource  = true
 ) {
 
 
@@ -121,15 +122,22 @@ class hosts (
   }
 
   if $use_fqdn_real == true {
-    @@host { $::fqdn:
-      ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
-      ip           => $fqdn_ip,
+    if $export_host_resource {
+      @@host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+      }
+    } else {
+      host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+      }
     }
-
     case $collect_all_real {
       # collect all the exported Host resources
-      true:  {
+      true: {
         Host <<| |>>
       }
       # only collect the exported entry above
