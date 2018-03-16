@@ -12,77 +12,49 @@ class hosts (
                                           'localhost4.localdomain4'],
   Array[String, 1] $localhost6_aliases = ['localhost6.localdomain6'],
   Boolean $purge_hosts = false,
-  Stdlib::Absolutepath $target = '/etc/hosts',
-  Variant[Undef, Hash] $host_entries = undef,
+  Optional[Stdlib::Absolutepath] $target = undef,
+  Optional[Hash] $host_entries = undef,
   IP::Address $fqdn_ip = $::ipaddress,
 ) {
 
-  if $enable_ipv4_localhost == true {
-    $localhost_ensure     = 'present'
-    $localhost_ip         = '127.0.0.1'
-    $my_localhost_aliases = $localhost_aliases
-  } else {
-    $localhost_ensure     = 'absent'
-    $localhost_ip         = '127.0.0.1'
-    $my_localhost_aliases = undef
+  # Set default hosts file $target in this scope
+  Host {
+    target => $target,
   }
 
-  if $enable_ipv6_localhost == true {
-    $localhost6_ensure     = 'present'
-    $localhost6_ip         = '::1'
-    $my_localhost6_aliases = $localhost6_aliases
-  } else {
-    $localhost6_ensure     = 'absent'
-    $localhost6_ip         = '::1'
-    $my_localhost6_aliases = undef
+  # IPv4 localhost
+  if $enable_ipv4_localhost {
+    host { 'localhost':
+      ensure       => present,
+      ip           => '127.0.0.1',
+      host_aliases => $localhost_aliases,
+    }
   }
 
-  if $enable_fqdn_entry == true {
-    $fqdn_ensure          = 'present'
-    $my_fqdn_host_aliases = $fqdn_host_aliases
-  } else {
-    $fqdn_ensure          = 'absent'
-    $my_fqdn_host_aliases = []
+  # IPv6 localhost
+  if $enable_ipv6_localhost {
+    host { 'localhost6':
+      ensure       => present,
+      ip           => '::1',
+      host_aliases => $localhost6_aliases,
+    }
   }
 
-  $host_defaults = {
-    'target' => $target,
+  # FQDN
+  if $enable_fqdn_entry {
+    host { $::fqdn:
+      ensure       => present,
+      host_aliases => $fqdn_host_aliases,
+      ip           => $fqdn_ip,
+    }
   }
 
-
-#  host { 'localhost':
-#    ensure => 'absent',
-#    *      => $host_defaults,
-#  }
-
-#  host { 'localhost':
-#    ensure       => $localhost_ensure,
-#    host_aliases => $my_localhost_aliases,
-#    ip           => $localhost_ip,
-#    *            => $host_defaults,
-#  }
-#
-#  host { 'localhost6':
-#    ensure       => $localhost6_ensure,
-#    host_aliases => $my_localhost6_aliases,
-#    ip           => $localhost6_ip,
-#    *            => $host_defaults,
-#  }
-
-  host { $::fqdn:
-    ensure       => $fqdn_ensure,
-    host_aliases => $my_fqdn_host_aliases,
-    ip           => $fqdn_ip,
-    *            => $host_defaults,
+  resources { 'host':
+    purge => $purge_hosts,
   }
-
-#  resources { 'host':
-#    purge => $purge_hosts,
-#  }
 
   if $host_entries != undef {
     $_host_entries = delete($host_entries,$::fqdn)
-
     $_host_entries.each |$k,$v| {
       host { $k:
         * => $v,
