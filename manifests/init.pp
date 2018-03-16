@@ -7,10 +7,12 @@ class hosts (
   Boolean $enable_ipv6_localhost = true,
   Boolean $enable_fqdn_entry = true,
   Variant[String, Array[String, 1]] $fqdn_host_aliases = $::hostname,
-  Array[String, 1] $localhost_aliases = ['localhost.localdomain',
+  String $localhost = 'localhost.localdomain',
+  Array[String, 1] $localhost_aliases = ['localhost',
                                           'localhost4',
                                           'localhost4.localdomain4'],
-  Array[String, 1] $localhost6_aliases = ['localhost6.localdomain6'],
+  String $localhost6 = 'localhost6.localdomain6',
+  Array[String, 1] $localhost6_aliases = ['localhost6'],
   Boolean $purge_hosts = false,
   Optional[Stdlib::Absolutepath] $target = undef,
   Optional[Hash] $host_entries = undef,
@@ -24,7 +26,7 @@ class hosts (
 
   # IPv4 localhost
   if $enable_ipv4_localhost {
-    host { 'localhost':
+    host { $localhost:
       ensure       => present,
       ip           => '127.0.0.1',
       host_aliases => $localhost_aliases,
@@ -33,7 +35,7 @@ class hosts (
 
   # IPv6 localhost
   if $enable_ipv6_localhost {
-    host { 'localhost6':
+    host { $localhost6:
       ensure       => present,
       ip           => '::1',
       host_aliases => $localhost6_aliases,
