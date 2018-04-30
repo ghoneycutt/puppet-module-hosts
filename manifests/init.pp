@@ -16,7 +16,7 @@ class hosts (
   Boolean $purge_hosts = false,
   Optional[Stdlib::Absolutepath] $target = undef,
   Optional[Hash] $host_entries = undef,
-  IP::Address $fqdn_ip = $::ipaddress,
+  Stdlib::IP::Address $fqdn_ip = $::ipaddress,
 ) {
 
   # Set default hosts file $target in this scope
