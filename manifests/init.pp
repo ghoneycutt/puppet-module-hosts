@@ -31,6 +31,13 @@ class hosts (
       ip           => '127.0.0.1',
       host_aliases => $localhost_aliases,
     }
+
+    if $localhost != 'localhost' {
+      # The spec tests seem pretty adamant that we should remove this
+      host { 'localhost':
+        ensure => absent,
+      }
+    }
   }
 
   # IPv6 localhost
