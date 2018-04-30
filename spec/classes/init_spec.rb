@@ -1,21 +1,19 @@
 require 'spec_helper'
 describe 'hosts' do
 
-  let(:facts) { { :ipaddress => '10.1.2.3' } }
+  let(:facts) {
+    { :hostname  => 'monkey',
+      :ipaddress => '10.1.2.3',
+      :fqdn      => 'monkey.example.com',
+    }
+  }
   it { should compile.with_all_deps }
 
   context 'with default parameter settings' do
-    let(:facts) {
-      { :hostname  => 'monkey',
-        :ipaddress => '10.1.2.3',
-        :fqdn      => 'monkey.example.com',
-      }
-    }
 
     it {
       should contain_host('localhost').with({
         'ensure' => 'absent',
-        'target' => '/etc/hosts',
       })
     }
 
@@ -24,16 +22,14 @@ describe 'hosts' do
         'ensure'       => 'present',
         'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
         'ip'           => '127.0.0.1',
-        'target'       => '/etc/hosts',
       })
     }
 
     it {
       should contain_host('localhost6.localdomain6').with({
         'ensure'       => 'present',
-        'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+        'host_aliases' => ['localhost6'],
         'ip'           => '::1',
-        'target'       => '/etc/hosts',
       })
     }
 
@@ -48,41 +44,73 @@ describe 'hosts' do
     it { should contain_resources('host').with({'purge' => false}) }
   end
 
+  describe 'with \'localhost_name\' parameter set to \'localhost\'' do
+    let(:params) { { :localhost_name => 'localhost' } }
+
+    it {
+      should contain_host('localhost').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
+        'ip'           => '127.0.0.1',
+      })
+    }
+  end
+
+  describe 'with \'localhost6_name\' parameter set to \'localhost6\'' do
+    let(:params) { { :localhost6_name => 'localhost6' } }
+
+    it {
+      should contain_host('localhost6').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['localhost6'],
+        'ip'           => '::1',
+      })
+    }
+  end
+
+  describe 'with \'fqdn_name\' parameter set to \'mono.example.org\'' do
+    let(:params) {
+      {
+        :fqdn_name         => 'mono.example.org',
+        :fqdn_host_aliases => ['monkey.example.org', 'monkey', 'mono'],
+      }
+    }
+
+    it {
+      should contain_host('mono.example.org').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['monkey.example.org', 'monkey', 'mono'],
+        'ip'           => '10.1.2.3',
+      })
+    }
+  end
+
   describe 'with \'enable_ipv4_localhost\' parameter set to' do
     [false].each do |enable_ipv4_localhost_value|
       context "#{enable_ipv4_localhost_value}" do
         let(:params) { { :enable_ipv4_localhost => enable_ipv4_localhost_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it { should compile }
 
         it {
-          should contain_host('localhost').with({
+          should_not contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => '/etc/hosts',
           })
         }
 
         it {
-          should contain_host('localhost.localdomain').with({
-            'ensure'       => 'absent',
-            'host_aliases' => nil,
+          should_not contain_host('localhost.localdomain').with({
+            'ensure'       => 'preset',
+            'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
           })
         }
 
         it {
           should contain_host('localhost6.localdomain6').with({
             'ensure'       => 'present',
-            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+            'host_aliases' => ['localhost6'],
             'ip'           => '::1',
-            'target'       => '/etc/hosts',
           })
         }
 
@@ -95,17 +123,10 @@ describe 'hosts' do
     [false].each do |enable_ipv6_localhost_value|
       context "#{enable_ipv6_localhost_value}" do
         let(:params) { { :enable_ipv6_localhost => enable_ipv6_localhost_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => '/etc/hosts',
           })
         }
 
@@ -114,16 +135,14 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
           })
         }
 
         it {
-          should contain_host('localhost6.localdomain6').with({
-            'ensure'       => 'absent',
+          should_not contain_host('localhost6.localdomain6').with({
+            'ensure'       => 'present',
             'host_aliases' => nil,
             'ip'           => '::1',
-            'target'       => '/etc/hosts',
           })
         }
 
@@ -136,17 +155,10 @@ describe 'hosts' do
     [false].each do |enable_fqdn_entry_value|
       context "#{enable_fqdn_entry_value}" do
         let(:params) { { :enable_fqdn_entry => enable_fqdn_entry_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => '/etc/hosts',
           })
         }
 
@@ -155,167 +167,22 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
           })
         }
 
         it {
           should contain_host('localhost6.localdomain6').with({
             'ensure'       => 'present',
-            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+            'host_aliases' => ['localhost6'],
             'ip'           => '::1',
-            'target'       => '/etc/hosts',
           })
         }
 
         it {
-          should contain_host('monkey.example.com').with({
-            'ensure'       => 'absent',
-            'host_aliases' => [],
-            'ip'           => '10.1.2.3',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it { should contain_resources('host').with({'purge' => false}) }
-      end
-    end
-  end
-
-  describe 'with \'use_fqdn\' parameter set to' do
-    [false].each do |use_fqdn_value|
-      context "#{use_fqdn_value}" do
-        let(:params) { { :use_fqdn => use_fqdn_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
-
-        it {
-          should contain_host('localhost').with({
-            'ensure' => 'absent',
-            'target' => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('localhost.localdomain').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
-            'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('localhost6.localdomain6').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
-            'ip'           => '::1',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it { should_not contain_host('monkey.example.com') }
-
-        it { should contain_resources('host').with({'purge' => false}) }
-      end
-    end
-  end
-
-  describe 'with \'use_fqdn\' parameter set to' do
-    [true].each do |use_fqdn_value|
-      context "#{use_fqdn_value}" do
-        let(:params) { { :use_fqdn => use_fqdn_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
-
-        it {
-          should contain_host('localhost').with({
-            'ensure' => 'absent',
-            'target' => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('localhost.localdomain').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
-            'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('localhost6.localdomain6').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
-            'ip'           => '::1',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('monkey.example.com').with({
+          should_not contain_host('monkey.example.com').with({
             'ensure'       => 'present',
             'host_aliases' => ['monkey'],
             'ip'           => '10.1.2.3',
-          })
-        }
-
-        it { should contain_resources('host').with({'purge' => false}) }
-      end
-
-      context 'and fqdn_ip specified' do
-        let(:params) {
-          {
-            :use_fqdn => use_fqdn_value,
-            :fqdn_ip  => '10.10.20.30',
-          }
-        }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
-
-        it {
-          should contain_host('localhost').with({
-            'ensure' => 'absent',
-            'target' => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('localhost.localdomain').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
-            'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('localhost6.localdomain6').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
-            'ip'           => '::1',
-            'target'       => '/etc/hosts',
-          })
-        }
-
-        it {
-          should contain_host('monkey.example.com').with({
-            'ensure'       => 'present',
-            'host_aliases' => ['monkey'],
-            'ip'           => '10.10.20.30',
           })
         }
 
@@ -327,17 +194,10 @@ describe 'hosts' do
   describe 'with \'localhost_aliases\' parameter set to' do
     context 'an array' do
       let(:params) { { :localhost_aliases => ['home','home.mydomain'] } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it {
         should contain_host('localhost').with({
           'ensure' => 'absent',
-          'target' => '/etc/hosts',
         })
       }
 
@@ -346,16 +206,14 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['home','home.mydomain'],
           'ip'           => '127.0.0.1',
-          'target'       => '/etc/hosts',
         })
       }
 
       it {
         should contain_host('localhost6.localdomain6').with({
           'ensure'       => 'present',
-          'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+          'host_aliases' => ['localhost6'],
           'ip'           => '::1',
-          'target'       => '/etc/hosts',
         })
       }
 
@@ -364,12 +222,6 @@ describe 'hosts' do
 
     context 'an invalid type (not array or string)' do
       let(:params) { { :localhost_aliases => true } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it 'should fail' do
         expect {
@@ -382,17 +234,10 @@ describe 'hosts' do
   describe 'with \'localhost6_aliases\' parameter set to' do
     context 'an array' do
       let(:params) { { :localhost6_aliases => ['home6','home6.mydomain'] } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it {
         should contain_host('localhost').with({
           'ensure' => 'absent',
-          'target' => '/etc/hosts',
         })
       }
 
@@ -401,7 +246,6 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
           'ip'           => '127.0.0.1',
-          'target'       => '/etc/hosts',
         })
       }
 
@@ -410,7 +254,6 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['home6','home6.mydomain'],
           'ip'           => '::1',
-          'target'       => '/etc/hosts',
         })
       }
 
@@ -419,12 +262,6 @@ describe 'hosts' do
 
     context 'an invalid type (not array or string)' do
       let(:params) { { :localhost6_aliases => true } }
-      let(:facts) {
-        { :hostname  => 'monkey',
-          :ipaddress => '10.1.2.3',
-          :fqdn      => 'monkey.example.com',
-        }
-      }
 
       it 'should fail' do
         expect {
@@ -438,17 +275,10 @@ describe 'hosts' do
     [true].each do |purge_hosts_value|
       context "#{purge_hosts_value}" do
         let(:params) { { :purge_hosts => purge_hosts_value } }
-        let(:facts) {
-          { :hostname  => 'monkey',
-            :ipaddress => '10.1.2.3',
-            :fqdn      => 'monkey.example.com',
-          }
-        }
 
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => '/etc/hosts',
           })
         }
 
@@ -457,16 +287,14 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => '/etc/hosts',
           })
         }
 
         it {
           should contain_host('localhost6.localdomain6').with({
             'ensure'       => 'present',
-            'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+            'host_aliases' => ['localhost6'],
             'ip'           => '::1',
-            'target'       => '/etc/hosts',
           })
         }
 
@@ -477,12 +305,6 @@ describe 'hosts' do
 
   context 'with \'target\' parameter specified' do
     let(:params) { { :target => '/usr/local/etc/hosts' } }
-    let(:facts) {
-      { :hostname  => 'monkey',
-        :ipaddress => '10.1.2.3',
-        :fqdn      => 'monkey.example.com',
-      }
-    }
 
     it {
       should contain_host('localhost').with({
@@ -503,7 +325,7 @@ describe 'hosts' do
     it {
       should contain_host('localhost6.localdomain6').with({
         'ensure'       => 'present',
-        'host_aliases' => ['localhost6', 'localhost6.localdomain6'],
+        'host_aliases' => ['localhost6'],
         'ip'           => '::1',
         'target'       => '/usr/local/etc/hosts',
       })
@@ -513,7 +335,6 @@ describe 'hosts' do
   end
 
   context 'with hosts defined' do
-    let(:facts) { { :ipaddress => '10.0.0.5' } }
     let(:params) { { :host_entries => {
       'myhost.example.com' => {
         'ip' => '10.0.0.5',

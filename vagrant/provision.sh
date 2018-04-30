@@ -40,5 +40,4 @@ fi
 puppet resource file /etc/puppetlabs/code/environments/production/modules/hosts ensure=link target=/vagrant
 
 # setup module dependencies
-puppet module install puppetlabs/stdlib --version 4.16.0
-puppet module install thrnio-ip --version 1.0.0
+puppet module install puppetlabs/stdlib --version 4.25.0

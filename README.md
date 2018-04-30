@@ -3,8 +3,8 @@ hosts module
 
 Manage host entries.
 
-Can ensure entries for localhost, localhost6, and $::fqdn, including
-aliases and optionally purge unmanaged entries.
+Can ensure host file entries for localhost, localhost6, $::fqdn, including
+aliases, arbitrary hosts and optionally purge unmanaged entries.
 
 [![Build Status](https://api.travis-ci.org/ghoneycutt/puppet-module-hosts.png?branch=master)](https://travis-ci.org/ghoneycutt/puppet-module-hosts)
 
@@ -18,6 +18,7 @@ matrix. The module is functionality tested with Vagrant. Please see the
 `Vagrantfile` for a list of those platforms.
 
 It should work with any \*nix based system that uses `/etc/hosts`.
+It should also work with any system that the puppet `host` type supports.
 
 ===
 
@@ -42,16 +43,10 @@ Boolean to enable entry for fqdn
 - *Default*: `true`
 
 ---
-#### use_fqdn
-When enabled use the `$::fqdn` fact to determine the hosts entry for the local node.
+#### localhost_name
+Host name entry for 127.0.0.1 (should be fqdn)
 
-- *Default*: `true`
-
----
-#### fqdn_host_aliases
-String or Array of aliases for fqdn
-
-- *Default*: `$::hostname`
+- *Default*: `'localhost.localdomain'`
 
 ---
 #### localhost_aliases
@@ -60,10 +55,37 @@ Array of aliases for localhost
 - *Default*: `[ 'localhost', 'localhost4', 'localhost4.localdomain4' ]`
 
 ---
+#### localhost6_name
+Host name entry for ::1 (should be fqdn)
+
+- *Default*: `'localhost6.localdomain6'`
+
+---
 #### localhost6_aliases
 Array of aliases for localhost6
 
 - *Default*: `[ 'localhost6', 'localhost6.localdomain6' ]`
+
+---
+#### fqdn_name
+Host name entry for the hosts primary IP (see fqdn_ip).
+This should probably be left as $::fqdn (default), as any aliases can be added
+as `fqdn_host_aliases`. However, if you do change this parameter, you should
+probably add `$::fqdn` to `fqdn_host_aliases`.
+
+- *Default*: `$::fqdn`
+
+---
+#### fqdn_host_aliases
+String or Array of aliases for FQDN
+
+- *Default*: `$::hostname`
+
+---
+#### fqdn_ip
+IP Address associated with entry used for FQDN.
+
+- *Default*: `$::ipaddress`
 
 ---
 #### purge_hosts
@@ -82,12 +104,6 @@ String for path to hosts file
 Hash of host entries
 
 - *Default*: `undef`
-
----
-#### fqdn_ip
-IP Address associated with entry used for FQDN.
-
-- *Default*: `$::ipaddress`
 
 ===
 
