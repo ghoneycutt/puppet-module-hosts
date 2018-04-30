@@ -7,15 +7,16 @@ class hosts (
   Boolean $enable_ipv6_localhost = true,
   Boolean $enable_fqdn_entry = true,
   Variant[String, Array[String, 1]] $fqdn_host_aliases = $::hostname,
-  String $localhost = 'localhost.localdomain',
+  String $localhost_name = 'localhost.localdomain',
   Array[String, 1] $localhost_aliases = ['localhost',
                                           'localhost4',
                                           'localhost4.localdomain4'],
-  String $localhost6 = 'localhost6.localdomain6',
+  String $localhost6_name = 'localhost6.localdomain6',
   Array[String, 1] $localhost6_aliases = ['localhost6'],
   Boolean $purge_hosts = false,
   Optional[Stdlib::Absolutepath] $target = undef,
   Optional[Hash] $host_entries = undef,
+  String $fqdn_name = $::fqdn,
   Stdlib::IP::Address $fqdn_ip = $::ipaddress,
 ) {
 
@@ -26,13 +27,13 @@ class hosts (
 
   # IPv4 localhost
   if $enable_ipv4_localhost {
-    host { $localhost:
+    host { $localhost_name:
       ensure       => present,
       ip           => '127.0.0.1',
       host_aliases => $localhost_aliases,
     }
 
-    if $localhost != 'localhost' {
+    if $localhost_name != 'localhost' and $localhost6_name != 'localhost' {
       # The spec tests seem pretty adamant that we should remove this
       host { 'localhost':
         ensure => absent,
@@ -42,7 +43,7 @@ class hosts (
 
   # IPv6 localhost
   if $enable_ipv6_localhost {
-    host { $localhost6:
+    host { $localhost6_name:
       ensure       => present,
       ip           => '::1',
       host_aliases => $localhost6_aliases,
@@ -51,7 +52,7 @@ class hosts (
 
   # FQDN
   if $enable_fqdn_entry {
-    host { $::fqdn:
+    host { $fqdn_name:
       ensure       => present,
       host_aliases => $fqdn_host_aliases,
       ip           => $fqdn_ip,

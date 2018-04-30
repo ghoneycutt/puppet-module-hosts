@@ -14,7 +14,6 @@ describe 'hosts' do
     it {
       should contain_host('localhost').with({
         'ensure' => 'absent',
-        'target' => nil,
       })
     }
 
@@ -23,7 +22,6 @@ describe 'hosts' do
         'ensure'       => 'present',
         'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
         'ip'           => '127.0.0.1',
-        'target'       => nil,
       })
     }
 
@@ -32,7 +30,6 @@ describe 'hosts' do
         'ensure'       => 'present',
         'host_aliases' => ['localhost6'],
         'ip'           => '::1',
-        'target'       => nil,
       })
     }
 
@@ -47,15 +44,43 @@ describe 'hosts' do
     it { should contain_resources('host').with({'purge' => false}) }
   end
 
-  describe 'with \'localhost\' parameter set to \'localhost\'' do
-    let(:params) { { :localhost => 'localhost' } }
+  describe 'with \'localhost_name\' parameter set to \'localhost\'' do
+    let(:params) { { :localhost_name => 'localhost' } }
 
     it {
       should contain_host('localhost').with({
         'ensure'       => 'present',
         'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
         'ip'           => '127.0.0.1',
-        'target'       => nil,
+      })
+    }
+  end
+
+  describe 'with \'localhost6_name\' parameter set to \'localhost6\'' do
+    let(:params) { { :localhost6_name => 'localhost6' } }
+
+    it {
+      should contain_host('localhost6').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['localhost6'],
+        'ip'           => '::1',
+      })
+    }
+  end
+
+  describe 'with \'fqdn_name\' parameter set to \'mono.example.org\'' do
+    let(:params) {
+      {
+        :fqdn_name         => 'mono.example.org',
+        :fqdn_host_aliases => ['monkey.example.org', 'monkey', 'mono'],
+      }
+    }
+
+    it {
+      should contain_host('mono.example.org').with({
+        'ensure'       => 'present',
+        'host_aliases' => ['monkey.example.org', 'monkey', 'mono'],
+        'ip'           => '10.1.2.3',
       })
     }
   end
@@ -70,7 +95,6 @@ describe 'hosts' do
         it {
           should_not contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => nil,
           })
         }
 
@@ -79,7 +103,6 @@ describe 'hosts' do
             'ensure'       => 'preset',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => nil,
           })
         }
 
@@ -88,7 +111,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost6'],
             'ip'           => '::1',
-            'target'       => nil,
           })
         }
 
@@ -105,7 +127,6 @@ describe 'hosts' do
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => nil,
           })
         }
 
@@ -114,7 +135,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => nil,
           })
         }
 
@@ -123,7 +143,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => nil,
             'ip'           => '::1',
-            'target'       => nil,
           })
         }
 
@@ -140,7 +159,6 @@ describe 'hosts' do
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => nil,
           })
         }
 
@@ -149,7 +167,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => nil,
           })
         }
 
@@ -158,7 +175,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost6'],
             'ip'           => '::1',
-            'target'       => nil,
           })
         }
 
@@ -167,7 +183,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['monkey'],
             'ip'           => '10.1.2.3',
-            'target'       => nil,
           })
         }
 
@@ -183,7 +198,6 @@ describe 'hosts' do
       it {
         should contain_host('localhost').with({
           'ensure' => 'absent',
-          'target' => nil,
         })
       }
 
@@ -192,7 +206,6 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['home','home.mydomain'],
           'ip'           => '127.0.0.1',
-          'target'       => nil,
         })
       }
 
@@ -201,7 +214,6 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['localhost6'],
           'ip'           => '::1',
-          'target'       => nil,
         })
       }
 
@@ -226,7 +238,6 @@ describe 'hosts' do
       it {
         should contain_host('localhost').with({
           'ensure' => 'absent',
-          'target' => nil,
         })
       }
 
@@ -235,7 +246,6 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
           'ip'           => '127.0.0.1',
-          'target'       => nil,
         })
       }
 
@@ -244,7 +254,6 @@ describe 'hosts' do
           'ensure'       => 'present',
           'host_aliases' => ['home6','home6.mydomain'],
           'ip'           => '::1',
-          'target'       => nil,
         })
       }
 
@@ -270,7 +279,6 @@ describe 'hosts' do
         it {
           should contain_host('localhost').with({
             'ensure' => 'absent',
-            'target' => nil,
           })
         }
 
@@ -279,7 +287,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost', 'localhost4', 'localhost4.localdomain4'],
             'ip'           => '127.0.0.1',
-            'target'       => nil,
           })
         }
 
@@ -288,7 +295,6 @@ describe 'hosts' do
             'ensure'       => 'present',
             'host_aliases' => ['localhost6'],
             'ip'           => '::1',
-            'target'       => nil,
           })
         }
 
