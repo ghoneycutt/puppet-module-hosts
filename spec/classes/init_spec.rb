@@ -234,13 +234,13 @@ describe 'hosts' do
         :message => 'expects a (match for|match for Stdlib::Absolutepath =|Stdlib::Absolutepath =) Variant\[Stdlib::Windowspath.*Stdlib::Unixpath', # Puppet (4.x|5.0 & 5.1|5.x)
       },
       'array of strings' => {
-        :name    => %w(localhost_aliases, localhost6_aliases),
+        :name    => %w(localhost_aliases localhost6_aliases),
         :valid   => [['array', 'of', 'string']],
         :invalid => ['string', { 'ha' => 'sh' }, 3, 2.42, false, nil, [1, 2]],
         :message => 'expects an Array|index 1 expects a String value, got', # Puppet 4 & 5
       },
       'boolean' => {
-        :name    => %w(enable_ipv4_localhost, enable_ipv6_localhost, enable_fqdn_entry, purge_hosts),
+        :name    => %w(enable_ipv4_localhost enable_ipv6_localhost enable_fqdn_entry purge_hosts),
         :valid   => [true, false],
         :invalid => ['string', %w(array), { 'ha' => 'sh' }, 3, 2.42, 'false', nil],
         :message => 'expects a Boolean value', # Puppet 4 & 5
