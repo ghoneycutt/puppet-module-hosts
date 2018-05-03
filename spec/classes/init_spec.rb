@@ -5,64 +5,21 @@ describe 'hosts' do
 
   describe 'with default parameter settings' do
     it {
-      should contain_host('localhost').with({
-        'ensure'       => 'present',
-        'ip'           => '127.0.0.1',
-        'host_aliases' => ['localhost.localdomain', 'localhost4', 'localhost4.localdomain4'],
-        'target'       => '/etc/hosts',
-      })
-    }
-
-    it {
-      should contain_host('localhost6').with({
-        'ensure'       => 'present',
-        'ip'           => '::1',
-        'host_aliases' => ['localhost.localdomain', 'localhost', 'localhost6.localdomain6'],
-        'target'       => '/etc/hosts',
-      })
-    }
-
-    it {
       should contain_host('monkey.example.com').with({
         'ensure'       => 'present',
         'ip'           => '10.1.2.3',
         'host_aliases' => 'monkey',
-        'target'       => '/etc/hosts',
+        'target'       => nil,
       })
     }
 
     it { should contain_resources('host').with({'purge' => false}) }
 
-    it { is_expected.to have_host_resource_count(3) }
   end
 
-  describe 'with enable_ipv4_localhost parameter set to false' do
-    let(:params) { { :enable_ipv4_localhost => false } }
-
-    it {
-      should contain_host('localhost').with({
-        'ensure'       => 'absent',
-        'ip'           => '127.0.0.1',
-        'host_aliases' => nil,
-      })
-    }
-  end
-
-  describe 'with enable_ipv6_localhost parameter set to false' do
-    let(:params) { { :enable_ipv6_localhost => false } }
-
-    it {
-      should contain_host('localhost6').with({
-        'ensure'       => 'absent',
-        'ip'           => '::1',
-        'host_aliases' => nil,
-      })
-    }
-  end
-
-  describe 'with enable_fqdn_entry' do
+  describe 'with fqdn_entry' do
     context 'set to false' do
-      let(:params) { { :enable_fqdn_entry => false } }
+      let(:params) { { :fqdn_entry => false } }
 
       it {
         should contain_host('monkey.example.com').with({
@@ -77,7 +34,7 @@ describe 'hosts' do
       context 'and fqdn_ip set' do
         let(:params) do
           {
-            :enable_fqdn_entry => true,
+            :fqdn_entry => true,
             :fqdn_ip           => '10.11.22.33',
           }
         end
@@ -89,7 +46,7 @@ describe 'hosts' do
         context 'set to a string' do
           let(:params) do
             {
-              :enable_fqdn_entry => true,
+              :fqdn_entry => true,
               :fqdn_host_aliases => 'monkeyman',
             }
           end
@@ -104,7 +61,7 @@ describe 'hosts' do
         context 'set to an array of strings' do
           let(:params) do
             {
-              :enable_fqdn_entry => true,
+              :fqdn_entry => true,
               :fqdn_host_aliases => ['monkey', 'monkeyman'],
             }
           end
@@ -119,26 +76,6 @@ describe 'hosts' do
     end
   end
 
-  describe 'with localhost_aliases parameter set' do
-    let(:params) { { :localhost_aliases => ['foo', 'what'] } }
-
-    it {
-      should contain_host('localhost').with({
-        'host_aliases' => ['foo', 'what'],
-      })
-    }
-  end
-
-  describe 'with localhost6_aliases parameter set' do
-    let(:params) { { :localhost6_aliases => ['foo', 'what'] } }
-
-    it {
-      should contain_host('localhost6').with({
-        'host_aliases' => ['foo', 'what'],
-      })
-    }
-  end
-
   describe 'with purge_hosts set to true' do
     let(:params) { { :purge_hosts => true } }
 
@@ -147,10 +84,6 @@ describe 'hosts' do
 
   describe 'with target set' do
     let(:params) { { :target => '/usr/local/etc/hosts' } }
-
-    it { should contain_host('localhost').with({'target' => '/usr/local/etc/hosts'}) }
-
-    it { should contain_host('localhost6').with({'target' => '/usr/local/etc/hosts'}) }
 
     it { should contain_host('monkey.example.com').with({'target' => '/usr/local/etc/hosts'}) }
   end
@@ -227,20 +160,8 @@ describe 'hosts' do
         :invalid => ['localhost', %w(array), { 'ha' => 'sh' }, 3, 2.42, false, nil],
         :message => 'Error while evaluating a Resource Statement',
       },
-      'Stdlib::Absolutepath' => {
-        :name    => %w(target),
-        :valid   => ['/absolute/filepath', '/absolute/directory/'],
-        :invalid => ['../invalid', %w(array), { 'ha' => 'sh' }, 3, 2.42, false, nil],
-        :message => 'expects a (match for|match for Stdlib::Absolutepath =|Stdlib::Absolutepath =) Variant\[Stdlib::Windowspath.*Stdlib::Unixpath', # Puppet (4.x|5.0 & 5.1|5.x)
-      },
-      'array of strings' => {
-        :name    => %w(localhost_aliases localhost6_aliases),
-        :valid   => [['array', 'of', 'string']],
-        :invalid => ['string', { 'ha' => 'sh' }, 3, 2.42, false, nil, [1, 2]],
-        :message => 'expects an Array|index 1 expects a String value, got', # Puppet 4 & 5
-      },
       'boolean' => {
-        :name    => %w(enable_ipv4_localhost enable_ipv6_localhost enable_fqdn_entry purge_hosts),
+        :name    => %w(fqdn_entry purge_hosts),
         :valid   => [true, false],
         :invalid => ['string', %w(array), { 'ha' => 'sh' }, 3, 2.42, 'false', nil],
         :message => 'expects a Boolean value', # Puppet 4 & 5
@@ -256,6 +177,12 @@ describe 'hosts' do
         :valid   => ['string', %w(array)],
         :invalid => [{ 'ha' => 'sh' }, 3, 2.42, false],
         :message => 'expects a value of type String or Array', # Puppet 4 & 5
+      },
+      'Stdlib::Absolutepath' => {
+        :name    => %w(target),
+        :valid   => ['/absolute/filepath', '/absolute/directory/'],
+        :invalid => ['../invalid', %w(array), { 'ha' => 'sh' }, 3, 2.42, false, nil],
+        :message => 'expects a (match for|match for Stdlib::Absolutepath =|Stdlib::Absolutepath =) Variant\[Stdlib::Windowspath.*Stdlib::Unixpath', # Puppet (4.x|5.0 & 5.1|5.x)
       },
     }
 
