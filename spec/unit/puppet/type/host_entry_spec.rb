@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'puppet/type/host_ext'
+require 'puppet/type/host_entry'
 
-describe Puppet::Type.type(:host_ext) do
+describe Puppet::Type.type(:host_entry) do
   let(:default_config) do
     {
       name: 'localhost at 127.0.0.1',
