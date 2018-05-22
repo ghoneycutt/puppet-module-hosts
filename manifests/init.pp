@@ -31,14 +31,14 @@ class hosts (
     'target' => $target,
   }
 
-  host { $::fqdn:
+  host_entry { $::fqdn:
     ensure       => $fqdn_ensure,
     host_aliases => $_fqdn_host_aliases,
     ip           => $fqdn_ip,
     *            => $host_defaults,
   }
 
-  resources { 'host':
+  resources { 'host_entry':
     purge => $purge_hosts,
   }
 
@@ -51,7 +51,7 @@ class hosts (
     $_host_entries = delete($host_entries_merged, $::fqdn)
 
     $_host_entries.each |$host, $params| {
-      host { $host:
+      host_entry { $host:
         * => $params,
       }
     }

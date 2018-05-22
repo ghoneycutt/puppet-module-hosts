@@ -5,7 +5,7 @@ describe 'hosts' do
 
   describe 'with default parameter settings' do
     it {
-      should contain_host('monkey.example.com').with({
+      should contain_host_entry('monkey.example.com').with({
         'ensure'       => 'present',
         'ip'           => '10.1.2.3',
         'host_aliases' => 'monkey',
@@ -13,7 +13,7 @@ describe 'hosts' do
       })
     }
 
-    it { should contain_resources('host').with({'purge' => false}) }
+    it { should contain_resources('host_entry').with({'purge' => false}) }
 
   end
 
@@ -22,7 +22,7 @@ describe 'hosts' do
       let(:params) { { :fqdn_entry => false } }
 
       it {
-        should contain_host('monkey.example.com').with({
+        should contain_host_entry('monkey.example.com').with({
           'ensure'       => 'absent',
           'ip'           => '10.1.2.3',
           'host_aliases' => nil,
@@ -39,7 +39,7 @@ describe 'hosts' do
           }
         end
 
-        it { should contain_host('monkey.example.com').with({'ip' => '10.11.22.33'}) }
+        it { should contain_host_entry('monkey.example.com').with({'ip' => '10.11.22.33'}) }
       end
 
       describe 'and fqdn_host_aliases' do
@@ -52,7 +52,7 @@ describe 'hosts' do
           end
 
           it {
-            should contain_host('monkey.example.com').with({
+            should contain_host_entry('monkey.example.com').with({
               'host_aliases' => 'monkeyman',
             })
           }
@@ -67,7 +67,7 @@ describe 'hosts' do
           end
 
           it {
-            should contain_host('monkey.example.com').with({
+            should contain_host_entry('monkey.example.com').with({
               'host_aliases' => ['monkey', 'monkeyman'],
             })
           }
@@ -79,13 +79,13 @@ describe 'hosts' do
   describe 'with purge_hosts set to true' do
     let(:params) { { :purge_hosts => true } }
 
-    it { should contain_resources('host').with({'purge' => true}) }
+    it { should contain_resources('host_entry').with({'purge' => true}) }
   end
 
   describe 'with target set' do
     let(:params) { { :target => '/usr/local/etc/hosts' } }
 
-    it { should contain_host('monkey.example.com').with({'target' => '/usr/local/etc/hosts'}) }
+    it { should contain_host_entry('monkey.example.com').with({'target' => '/usr/local/etc/hosts'}) }
   end
 
   describe 'with host_entries' do
@@ -106,14 +106,14 @@ describe 'hosts' do
       end
 
       it {
-        should contain_host('myhost.example.com').with({
+        should contain_host_entry('myhost.example.com').with({
           'ip' => '10.0.0.5',
           'host_aliases' => ['myhost'],
         })
       }
 
       it {
-        should contain_host('myhost2.example.com').with({
+        should contain_host_entry('myhost2.example.com').with({
           'ip' => '10.0.0.6',
           'host_aliases' => ['myhost2','loghost'],
         })
@@ -137,14 +137,14 @@ describe 'hosts' do
       end
 
       it {
-        should_not contain_host('monkey.example.com').with({
+        should_not contain_host_entry('monkey.example.com').with({
           'ip' => '10.0.0.5',
           'host_aliases' => 'monkey',
         })
       }
 
       it {
-        should contain_host('anotherhost.example.com').with({
+        should contain_host_entry('anotherhost.example.com').with({
           'ip' => '10.0.0.6',
           'host_aliases' => 'anotherhost',
         })
