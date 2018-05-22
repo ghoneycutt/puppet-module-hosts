@@ -34,14 +34,14 @@ puppet apply -v /tmp/test.pp
 echo -e "## It should change IP for fqdn '192.168.9.9 test.example.com test'"
 egrep "^192.168.9.9\s+test.example.com\s+test$" /etc/hosts
 
-# enable_fqdn_entry
-echo -e "\n\n##### With enable_fqdn_entry set to false"
+# fqdn_entry
+echo -e "\n\n##### With fqdn_entry set to false"
 echo -e "# Restoring /etc/hosts"
 restore_hosts
 cat > /tmp/test.pp << EOF
 class { '::hosts':
   fqdn_ip => \$facts['networking']['interfaces']['eth1']['ip'],
-  enable_fqdn_entry => false,
+  fqdn_entry => false,
 }
 EOF
 
@@ -51,46 +51,6 @@ echo -e "## fqdn entry should not exist"
 egrep "^192.168.99.10\s+test.example.com\s+test$" /etc/hosts
 if [ $? -eq 0 ]; then
   echo "fqdn entry exists and should not"
-  exit 1
-fi
-set -e
-
-# enable_ipv4_localhost
-echo -e "\n\n##### With enable_ipv4_localhost set to false"
-echo -e "# Restoring /etc/hosts"
-restore_hosts
-cat > /tmp/test.pp << EOF
-class { '::hosts':
-#  fqdn_ip => \$facts['networking']['interfaces']['eth1']['ip'],
-  enable_ipv4_localhost => false,
-}
-EOF
-puppet apply -v /tmp/test.pp
-echo -e "## It should not have any ipv4 localhost entries"
-set +e
-egrep "^127.0.0.1" /etc/hosts
-if [ $? -eq 0 ]; then
-  echo "ipv4 localhost entry exists and should not"
-  exit 1
-fi
-set -e
-
-# enable_ipv6_localhost
-echo -e "\n\n##### With enable_ipv6_localhost set to false"
-echo -e "# Restoring /etc/hosts"
-restore_hosts
-cat > /tmp/test.pp << EOF
-class { '::hosts':
-#  fqdn_ip => \$facts['networking']['interfaces']['eth1']['ip'],
-  enable_ipv6_localhost => false,
-}
-EOF
-puppet apply -v /tmp/test.pp
-echo -e "## It should not have any ipv6 localhost entries"
-set +e
-egrep "^::1" /etc/hosts
-if [ $? -eq 0 ]; then
-  echo "ipv6 localhost entry exists and should not"
   exit 1
 fi
 set -e
@@ -120,38 +80,6 @@ echo -e "## It should include the two entries from the hash"
 egrep "^10.10.10.10\s+foo.example.com\s+foo$" /etc/hosts
 egrep "^10.20.20.20\s+bar.example.com\s+bar$" /etc/hosts
 
-# localhost_aliases
-echo -e "\n\n##### With localhost_aliases specified as ['foo', 'foo.example.com']"
-echo -e "# Restoring /etc/hosts"
-restore_hosts
-cat > /tmp/test.pp << EOF
-class { '::hosts':
-  localhost_aliases => [
-    'foo',
-    'foo.example.com',
-  ],
-}
-EOF
-puppet apply -v /tmp/test.pp
-echo -e "## It should change the aliases for localhost '127.0.0.1 localhost foo foo.example.com'"
-egrep "^127.0.0.1\s+localhost\s+foo\s+foo.example.com$" /etc/hosts
-
-# localhost6_aliases
-echo -e "\n\n##### With localhost6_aliases specified as ['foo6', 'foo6.example.com']"
-echo -e "# Restoring /etc/hosts"
-restore_hosts
-cat > /tmp/test.pp << EOF
-class { '::hosts':
-  localhost6_aliases => [
-    'foo6',
-    'foo6.example.com',
-  ],
-}
-EOF
-puppet apply -v /tmp/test.pp
-echo -e "## It should change the aliases for localhost6 '::1 localhost6 foo6 foo6.example.com'"
-egrep "^::1\s+localhost6\s+foo6\s+foo6.example.com$" /etc/hosts
-
 # purge_hosts
 echo -e "\n\n##### With purge_hosts set to true"
 echo -e "# Restoring /etc/hosts"
@@ -172,6 +100,39 @@ if [ $? -eq 0 ]; then
   exit 1
 fi
 set -e
+
+# multiple localhost entries
+echo -e "\n\n##### With multiple host_entry resources having localhost as the name specified"
+echo -e "# Restoring /etc/hosts"
+restore_hosts
+cat > /tmp/test.pp << EOF
+class { '::hosts':
+  purge_hosts => true,
+  host_entries => {
+    'localhost ipv4' => {
+      ip => '127.0.0.1',
+      hostname => 'localhost',
+      host_aliases => ['localhost.localdomain','localhost4','localhost4.localdomain4'],
+    },
+    'localhost ipv6' => {
+      ip => '::1',
+      hostname => 'localhost',
+      host_aliases => ['localhost.localdomain','localhost6','localhost6.localdomain6'],
+    },
+  },
+}
+EOF
+
+puppet apply -v /tmp/test.pp
+echo -e "## It should include the two entries from the hash"
+egrep "^127.0.0.1\s+localhost\s+localhost.localdomain\s+localhost4\s+localhost4.localdomain4$" /etc/hosts
+egrep "::1\s+localhost\s+localhost.localdomain\s+localhost6\s+localhost6.localdomain6$" /etc/hosts
+echo -e "## It should include only two entries"
+lines=$(wc -l /etc/hosts | awk '{print $1}')
+if [ $lines != '6' ]; then
+  echo "expecting 6 lines (2 entries, 1 for fqdn and 3 for comments) and found ${lines} lines"
+  exit 1
+fi
 
 # Fix /etc/hosts
 echo -e "\n\n##### Restoring /etc/hosts to original"
