@@ -11,7 +11,7 @@ else
 end
 
 
-Puppet::Type.type(:host_ext).provide(:parsed,:parent => Puppet::Provider::ParsedFile,
+Puppet::Type.type(:host_entry).provide(:parsed,:parent => Puppet::Provider::ParsedFile,
   :default_target => hosts,:filetype => :flat) do
   confine :exists => hosts
 

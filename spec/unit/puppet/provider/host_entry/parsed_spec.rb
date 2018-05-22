@@ -1,11 +1,11 @@
 #! /usr/bin/env ruby
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:host_ext).provider(:parsed)
+provider_class = Puppet::Type.type(:host_entry).provider(:parsed)
 
 describe provider_class do
   before do
-    @host_class = Puppet::Type.type(:host_ext)
+    @host_class = Puppet::Type.type(:host_entry)
     @provider = @host_class.provider(:parsed)
     @hostfile = Tempfile.new('hosts').path
     allow_any_instance_of(@provider).to receive(:target).and_return(@hostfile)
