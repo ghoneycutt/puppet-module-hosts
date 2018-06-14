@@ -140,7 +140,7 @@ class hosts (
   }
 
   resources { 'host':
-    purge => $purge_hosts,
+    purge => $purge_hosts_enabled,
   }
 
   if $host_entries != undef {
