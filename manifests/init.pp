@@ -9,7 +9,7 @@ class hosts (
   $enable_fqdn_entry     = true,
   $use_fqdn              = true,
   $fqdn_host_aliases     = $::hostname,
-  $fqdn_ip               = $::ipaddress
+  $fqdn_ip               = $::ipaddress,
   $localhost_aliases     = ['localhost',
                             'localhost4',
                             'localhost4.localdomain4'],
