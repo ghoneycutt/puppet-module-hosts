@@ -12,9 +12,9 @@ and optionally purge unmanaged entries.
 
 # Compatibility
 
-This module is built for use with Puppet v3 (with and without the future
-parser) and Puppet v4 on the following platforms and supports Ruby versions
-1.8.7, 1.9.3, 2.0.0 and 2.1.9. See .travis.yml for matrix.
+This module has been tested to work on the following systems with the
+latest Puppet v3, v3 with future parser, v4, v5 and v6.  See `.travis.yml`
+for the exact matrix of supported Puppet and ruby versions.
 
 It should work with any *nix based system that uses `/etc/hosts`.
 
