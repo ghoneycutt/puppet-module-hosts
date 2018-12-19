@@ -1,7 +1,8 @@
-RSpec.configure do |c|
-  c.mock_with :rspec
+# RSpec.configure specified twice due to bug in puppetlabs_spec_helper.
+# https://tickets.puppetlabs.com/browse/PDK-916
+RSpec.configure do |config|
+  config.mock_with :rspec
 end
-
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 RSpec.configure do |config|
@@ -15,6 +16,8 @@ RSpec.configure do |config|
     Facter.clear_messages
   end
   config.default_facts = {
-    :environment => 'rp_env',
+    :fqdn        => 'monkey.example.com',
+    :hostname    => 'monkey',
+    :ipaddress   => '10.1.2.3',
   }
 end

@@ -12,6 +12,7 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+Gemfile.lock
 
 # YARD artifacts
 .yardoc
@@ -24,6 +25,9 @@ doc/
 # Eclipse
 .project
 
+# Visual Studio Code
+.vscode/
+
 # OS X
 .DS_Store
 
@@ -31,4 +35,7 @@ doc/
 coverage/
 spec/fixtures/manifests/*
 spec/fixtures/modules/*
-Gemfile.lock
+log/
+
+# Vagrant
+.vagrant/*
