@@ -7,9 +7,11 @@ aliases, arbitrary hosts and optionally purge unmanaged entries.
 
 # Compatibility
 
-This module has been tested to work on the following systems with the
-latest Puppet v3, v3 with future parser, v4, v5 and v6.  See `.travis.yml`
-for the exact matrix of supported Puppet and ruby versions.
+This module is built for use with Puppet versions 4, 5 and 6 with the
+ruby versions that they are packaged with. See `.travis.yml` for the
+exact matrix. The module is functionality tested with Vagrant and
+acceptance tests using beaker. Please see the `Vagrantfile` for a list
+of those platforms.
 
 It should work with any \*nix based system that uses `/etc/hosts`.
 It should also work with any system that the puppet `host` type supports.
