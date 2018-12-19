@@ -12,9 +12,7 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
-/Gemfile.lock
-/Gemfile.local
-coverage/
+Gemfile.lock
 
 # YARD artifacts
 .yardoc
@@ -34,11 +32,10 @@ doc/
 .DS_Store
 
 # Puppet
+coverage/
 spec/fixtures/manifests/*
 spec/fixtures/modules/*
+log/
 
 # Vagrant
 .vagrant/*
-
-# direnv
-/.envrc
