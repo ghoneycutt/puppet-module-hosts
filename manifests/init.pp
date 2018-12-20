@@ -9,6 +9,7 @@ class hosts (
   $enable_fqdn_entry     = true,
   $use_fqdn              = true,
   $fqdn_host_aliases     = $::hostname,
+  $fqdn_ip               = $::ipaddress,
   $localhost_aliases     = ['localhost',
                             'localhost4',
                             'localhost4.localdomain4'],
@@ -17,6 +18,7 @@ class hosts (
   $purge_hosts           = false,
   $target                = '/etc/hosts',
   $host_entries          = undef,
+  $export_host_resource  = true
 ) {
 
 
@@ -93,11 +95,9 @@ class hosts (
   if $fqdn_entry_enabled == true {
     $fqdn_ensure          = 'present'
     $my_fqdn_host_aliases = $fqdn_host_aliases
-    $fqdn_ip              = $::ipaddress
   } else {
     $fqdn_ensure          = 'absent'
     $my_fqdn_host_aliases = []
-    $fqdn_ip              = $::ipaddress
   }
 
   Host {
@@ -121,15 +121,22 @@ class hosts (
   }
 
   if $use_fqdn_real == true {
-    @@host { $::fqdn:
-      ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
-      ip           => $fqdn_ip,
+    if $export_host_resource {
+      @@host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+      }
+    } else {
+      host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
+      }
     }
-
     case $collect_all_real {
       # collect all the exported Host resources
-      true:  {
+      true: {
         Host <<| |>>
       }
       # only collect the exported entry above
