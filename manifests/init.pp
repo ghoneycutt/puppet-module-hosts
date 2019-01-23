@@ -3,6 +3,7 @@
 # Manage /etc/hosts
 #
 class hosts (
+  $stored_config         = true,
   $collect_all           = false,
   $enable_ipv4_localhost = true,
   $enable_ipv6_localhost = true,
@@ -25,6 +26,13 @@ class hosts (
     $collect_all_real = str2bool($collect_all)
   } else {
     $collect_all_real = $collect_all
+  }
+
+  # validate type and convert string to boolean if necessary
+  if is_string($stored_config) {
+    $stored_config_real = str2bool($stored_config)
+  } else {
+    $stored_config_real = $stored_config
   }
 
   # validate type and convert string to boolean if necessary
@@ -121,20 +129,27 @@ class hosts (
   }
 
   if $use_fqdn_real == true {
-    @@host { $::fqdn:
-      ensure       => $fqdn_ensure,
-      host_aliases => $my_fqdn_host_aliases,
-      ip           => $fqdn_ip,
-    }
-
-    case $collect_all_real {
-      # collect all the exported Host resources
-      true:  {
-        Host <<| |>>
+    if $stored_config_real == true {
+      @@host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
       }
-      # only collect the exported entry above
-      default: {
-        Host <<| title == $::fqdn |>>
+      case $collect_all_real {
+        # collect all the exported Host resources
+        true:  {
+          Host <<| |>>
+        }
+        # only collect the exported entry above
+        default: {
+          Host <<| title == $::fqdn |>>
+        }
+      }
+    } else {
+      host { $::fqdn:
+        ensure       => $fqdn_ensure,
+        host_aliases => $my_fqdn_host_aliases,
+        ip           => $fqdn_ip,
       }
     }
   }
