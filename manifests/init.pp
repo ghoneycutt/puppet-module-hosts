@@ -119,7 +119,6 @@ class hosts (
     ensure       => $localhost6_ensure,
     host_aliases => $my_localhost6_aliases,
     ip           => $localhost6_ip,
-    tag          => $tag,
   }
 
   if $use_fqdn_real == true {
@@ -127,6 +126,7 @@ class hosts (
       ensure       => $fqdn_ensure,
       host_aliases => $my_fqdn_host_aliases,
       ip           => $fqdn_ip,
+      tag          => $tag,
     }
 
     case $collect_all_real {
