@@ -17,6 +17,7 @@ class hosts (
   $purge_hosts           = false,
   $target                = '/etc/hosts',
   $host_entries          = undef,
+  $tag_identifier        = 'hosts-default',
 ) {
 
 
@@ -125,12 +126,17 @@ class hosts (
       ensure       => $fqdn_ensure,
       host_aliases => $my_fqdn_host_aliases,
       ip           => $fqdn_ip,
+      tag          => $tag_identifier,
     }
 
     case $collect_all_real {
       # collect all the exported Host resources
       true:  {
-        Host <<| |>>
+        if $tag_identifier == 'hosts-default' {
+          Host <<| |>>
+        } else {
+          Host <<| tag == $tag_identifier |>>
+        }
       }
       # only collect the exported entry above
       default: {
