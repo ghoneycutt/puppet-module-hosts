@@ -134,7 +134,7 @@ class hosts (
       true:  {
         if $tag == 'hosts-default' {
           Host <<| |>>
-        }else{
+        } else {
           Host <<| tag == $tag |>>
         }
       }
