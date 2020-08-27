@@ -134,7 +134,7 @@ class hosts (
             Host <<| |>>
           }
           1: {
-            Host <<| tag == $tag_collector |>>
+            Host <<| tag == $tag_collector[0] |>>
           }
           2: {
             Host <<| tag == $tag_collector[0] or tag == $tag_collector[1] |>>
