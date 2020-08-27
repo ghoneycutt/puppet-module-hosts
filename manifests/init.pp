@@ -3,23 +3,20 @@
 # Manage /etc/hosts
 #
 class hosts (
-  $collect_all           = false,
-  $enable_ipv4_localhost = true,
-  $enable_ipv6_localhost = true,
-  $enable_fqdn_entry     = true,
-  $use_fqdn              = true,
-  $fqdn_host_aliases     = $::hostname,
-  $localhost_aliases     = ['localhost',
-                            'localhost4',
-                            'localhost4.localdomain4'],
-  $localhost6_aliases    = ['localhost6',
-                            'localhost6.localdomain6'],
-  $purge_hosts           = false,
-  $target                = '/etc/hosts',
-  $host_entries          = undef,
-  $tag_identifier        = 'hosts-default',
+  Optional[Boolean] $collect_all           = false,
+  Optional[Boolean] $enable_ipv4_localhost = true,
+  Optional[Boolean] $enable_ipv6_localhost = true,
+  Optional[Boolean] $enable_fqdn_entry     = true,
+  Optional[Boolean] $use_fqdn              = true,
+  Optional[String] $fqdn_host_aliases      = $::hostname,
+  Optional[Array] $localhost_aliases       = [ 'localhost', 'localhost4', 'localhost4.localdomain4' ],
+  Optional[Array] $localhost6_aliases      = [ 'localhost6', 'localhost6.localdomain6' ],
+  Optional[Boolean] $purge_hosts           = false,
+  Optional[String] $target                 = '/etc/hosts',
+  Optional[Hash] $host_entries             = undef,
+  Optional[Array] $tag_identifier          = [ $::datacenter, $::application, $::software_version ],
+  Optional[Array] $tag_collector           = [],
 ) {
-
 
   # validate type and convert string to boolean if necessary
   if is_string($collect_all) {
@@ -132,10 +129,22 @@ class hosts (
     case $collect_all_real {
       # collect all the exported Host resources
       true:  {
-        if $tag_identifier == 'hosts-default' {
-          Host <<| |>>
-        } else {
-          Host <<| tag == $tag_identifier |>>
+        case $tag_collector.length {
+          0: {
+            Host <<| |>>
+          }
+          1: {
+            Host <<| tag == $tag_collector |>>
+          }
+          2: {
+            Host <<| tag == $tag_collector[0] or tag == $tag_collector[1] |>>
+          }
+          3: {
+            Host <<| tag == $tag_collector[0] or tag == $tag_collector[1] or tag == $tag_collector[2] |>>
+          }
+          default: {
+            fail('Host Tag Collector supports max 3 entries!')
+          }
         }
       }
       # only collect the exported entry above
