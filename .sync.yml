@@ -1,0 +1,46 @@
+# This file can be used to customize the files managed by PDK.
+#
+# See https://github.com/puppetlabs/pdk-templates/blob/main/README.md
+# for more information.
+#
+# See https://github.com/puppetlabs/pdk-templates/blob/main/config_defaults.yml
+# for the default values.
+---
+.github/workflows/ci.yaml:
+  unit_name: Puppet ${{ matrix.puppet }} (Ruby ${{ matrix.ruby }} fixtures=${{ matrix.fixtures }})
+  unit_includes:
+    - ruby: '2.7.0'
+      puppet: '7'
+      fixtures: .fixtures.yml
+      allow_failure: false
+    - ruby: '2.7.0'
+      puppet: '7'
+      fixtures: .fixtures-latest.yml
+      allow_failure: true
+  acceptance_matrix:
+    set:
+      - debian-10
+      - rocky-8
+      - ubuntu-1804
+    puppet:
+      - puppet7
+.travis.yml:
+  delete: true
+Rakefile:
+  changelog_user: ghoneycutt
+.gitlab-ci.yml:
+  delete: true
+appveyor.yml:
+  delete: true
+spec/acceptance/nodesets/centos-6.yml:
+  delete: true
+spec/acceptance/nodesets/centos-7.yml:
+  delete: true
+spec/acceptance/nodesets/centos-8.yml:
+  delete: true
+spec/acceptance/nodesets/ubuntu-1604.yml:
+  delete: true
+spec/acceptance/nodesets/debian-8.yml:
+  delete: true
+spec/acceptance/nodesets/debian-9.yml:
+  delete: true

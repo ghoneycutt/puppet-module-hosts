@@ -1,101 +1,78 @@
-hosts module
-============
+# puppet-module-hosts
 
-Manage host entries.
+#### Table of Contents
 
-Can ensure entries for localhost, localhost6, and $::fqdn, including aliases
-and optionally purge unmanaged entries.
+1. [Module Description - What the module does and why it is useful](#module-description)
+1. [Setup - The basics of getting started with hosts](#setup)
+   * [What hosts affects](#what-hosts-affects)
+   * [Setup requirements](#setup-requirements)
+   * [Beginning with hosts](#beginning-with-hosts)
+1. [Usage - Configuration options and additional functionality](#usage)
+1. [Limitations - OS compatibility, etc.](#limitations)
+1. [Development - Guide for contributing to the module](#development)
 
-[![Build Status](https://api.travis-ci.org/ghoneycutt/puppet-module-hosts.png?branch=master)](https://travis-ci.org/ghoneycutt/puppet-module-hosts)
+## Description
 
-===
+This is a very simple module to manage host entries in `/etc/hosts`. It
+works by applying a hash of `host` resources.
 
-# Compatibility
 
-This module has been tested to work on the following systems with the
-latest Puppet v3, v3 with future parser, v4, v5 and v6.  See `.travis.yml`
-for the exact matrix of supported Puppet and ruby versions.
+## Setup
 
-It should work with any *nix based system that uses `/etc/hosts`.
+### What hosts affects
 
-===
+Generally just the `/etc/hosts` file though you may use the `target`
+attribute of the `host` resource to manage host entries in other files.
 
-# Parameters
+### Setup requiremements
 
-enable_ipv4_localhost
----------------------
-Boolean to enable ipv4 localhost entry
+The ability to manage `/etc/hosts` was moved out of Puppet and into a
+core module at
+[https://github.com/puppetlabs/puppetlabs-host_core](https://github.com/puppetlabs/puppetlabs-host_core)
+and this module relies upon it.
 
-- *Default*: true
+### Beginning with hosts
 
-enable_ipv6_localhost
----------------------
-Boolean to enable ipv6 localhost entry
+Declare the `hosts` class.
 
-- *Default*: true
+## Usage
 
-enable_fqdn_entry
------------------
-Boolean to enable entry for fqdn
+The normal use case. If you are not adding the local system by default
+as shown below, this is a good option. Then you can just add
+`hosts::hosts` entries throughout Hiera.
 
-- *Default*: true
+```puppet
+include hosts
+```
 
-use_fqdn
---------
-When enabled use the ${::fqdn} fact to determine the hosts entry for the local node.
+Sample profile which implements functionality from previous versions.
 
-- *Default*: true
+```puppet
+# Lookup everything in Hiera using the key 'host_entries' and add the
+# local system with its FQDN and IP address.
+$hosts = lookup('host_entries', undef, deep, {}) + {
+  $facts['networking']['hostname'] => {
+    ensure       => present,
+    host_aliases => [$facts['networking']['fqdn']],
+    ip           => $facts['networking']['ip'],
+  }
+}
 
-fqdn_host_aliases
------------------
-String or Array of aliases for fqdn
+class { 'hosts':
+  hosts => $hosts,
+}
+```
 
-- *Default*: $::hostname
+## Limitations
 
-localhost_aliases
------------------
-String or Array of aliases for localhost
+This module officially supports the platforms listed in the
+`metadata.json`. It does not fail on unsupported platforms and has been
+known to work on many, many platforms since its creation in 2010.
 
-- *Default*: [ 'localhost', 'localhost4', 'localhost4.localdomain4' ]
+## Development
 
-localhost6_aliases
-------------------
-String or Array of aliases for localhost6
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-- *Default*: [ 'localhost6', 'localhost6.localdomain6' ]
+## License
 
-purge_hosts
------------
-Boolean to optionally purge unmanaged entries from hosts
-
-- *Default*: false
-
-target
-------
-String for path to hosts file
-
-- *Default*: /etc/hosts
-
-collect_all
------------
-Boolean to optionally collect all the exported Host resources
-
-- *Default*: false
-
-host_entries
-------------
-Hash of host entries
-
-- *Default*: undef
-
-===
-
-# Hiera example of host_entries
-<pre>
----
-hosts::host_entries:
-  'servicename.example.com':
-    ip: '10.0.0.5'
-    host_aliases:
-      - 'servicename'
-</pre>
+See [LICENSE](LICENSE) file.
