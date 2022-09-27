@@ -26,16 +26,7 @@ include hosts
 
 The following parameters are available in the `hosts` class:
 
-* [`target`](#target)
 * [`hosts`](#hosts)
-
-##### <a name="target"></a>`target`
-
-Data type: `Stdlib::Absolutepath`
-
-The path to the hosts file
-
-Default value: `'/etc/hosts'`
 
 ##### <a name="hosts"></a>`hosts`
 
