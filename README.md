@@ -16,6 +16,9 @@
 This is a very simple module to manage host entries in `/etc/hosts`. It
 works by applying a hash of `host` resources.
 
+Documented with Puppet Strings at
+[http://ghoneycutt.github.io/puppet-module-hosts/](http://ghoneycutt.github.io/puppet-module-hosts/).
+
 
 ## Setup
 

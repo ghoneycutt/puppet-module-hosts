@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v3.0.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v3.0.0) (2022-09-26)
+
+The API has changed.
+
 ## [v2.8.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v2.8.0) (2022-09-26)
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.8.0...v2.8.0)
