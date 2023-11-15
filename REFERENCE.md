@@ -26,9 +26,9 @@ include hosts
 
 The following parameters are available in the `hosts` class:
 
-* [`hosts`](#hosts)
+* [`hosts`](#-hosts--hosts)
 
-##### <a name="hosts"></a>`hosts`
+##### <a name="-hosts--hosts"></a>`hosts`
 
 Data type: `Hash`
 

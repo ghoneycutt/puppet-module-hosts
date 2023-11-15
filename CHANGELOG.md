@@ -2,23 +2,28 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v3.0.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v3.0.0) (2022-09-26)
+## [v4.0.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v4.0.0) (2023-11-15)
 
-The API has changed.
+[Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v3.0.0...v4.0.0)
 
-## [v2.8.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v2.8.0) (2022-09-26)
+### Merged pull requests:
 
-[Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.8.0...v2.8.0)
+- Support Puppet 8 and stdlib 9.x [\#92](https://github.com/ghoneycutt/puppet-module-hosts/pull/92) ([treydock](https://github.com/treydock))
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+## [v3.0.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v3.0.0) (2022-09-27)
 
+[Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.8.0...v3.0.0)
+
+### Merged pull requests:
+
+- Rework for v3 [\#88](https://github.com/ghoneycutt/puppet-module-hosts/pull/88) ([ghoneycutt](https://github.com/ghoneycutt))
 - bump stdlib to \< 9.0.0 [\#86](https://github.com/ghoneycutt/puppet-module-hosts/pull/86) ([jhoblitt](https://github.com/jhoblitt))
 
 ## [v2.8.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v2.8.0) (2022-04-07)
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.7.0...v2.8.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Update stdlib dependency [\#82](https://github.com/ghoneycutt/puppet-module-hosts/pull/82) ([kobybr](https://github.com/kobybr))
 
@@ -26,7 +31,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.6.0...v2.7.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Add support for Puppet 5 & 6 [\#74](https://github.com/ghoneycutt/puppet-module-hosts/pull/74) ([Phil-Friderici](https://github.com/Phil-Friderici))
 - Test exported resources [\#61](https://github.com/ghoneycutt/puppet-module-hosts/pull/61) ([ghoneycutt](https://github.com/ghoneycutt))
@@ -35,7 +40,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.5.0...v2.6.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Normalize testing [\#60](https://github.com/ghoneycutt/puppet-module-hosts/pull/60) ([ghoneycutt](https://github.com/ghoneycutt))
 
@@ -43,7 +48,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.4.1...v2.5.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Support Puppet \>= 4.9 [\#58](https://github.com/ghoneycutt/puppet-module-hosts/pull/58) ([Phil-Friderici](https://github.com/Phil-Friderici))
 
@@ -51,7 +56,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.4.0...v2.4.1)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Fix spec [\#56](https://github.com/ghoneycutt/puppet-module-hosts/pull/56) ([ghoneycutt](https://github.com/ghoneycutt))
 - Use puppet lint v2 [\#55](https://github.com/ghoneycutt/puppet-module-hosts/pull/55) ([ghoneycutt](https://github.com/ghoneycutt))
@@ -60,7 +65,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.3.0...v2.4.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Ruby231 [\#51](https://github.com/ghoneycutt/puppet-module-hosts/pull/51) ([ghoneycutt](https://github.com/ghoneycutt))
 - Move comments to correct context in Gemfile [\#47](https://github.com/ghoneycutt/puppet-module-hosts/pull/47) ([Phil-Friderici](https://github.com/Phil-Friderici))
@@ -69,7 +74,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.2.4...v2.3.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Add puppetv4 [\#46](https://github.com/ghoneycutt/puppet-module-hosts/pull/46) ([ghoneycutt](https://github.com/ghoneycutt))
 - Puppetv4 fixes [\#45](https://github.com/ghoneycutt/puppet-module-hosts/pull/45) ([anders-larsson](https://github.com/anders-larsson))
@@ -78,7 +83,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.2.3...v2.2.4)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Fix style warnings [\#37](https://github.com/ghoneycutt/puppet-module-hosts/pull/37) ([ghoneycutt](https://github.com/ghoneycutt))
 
@@ -86,7 +91,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.2.2...v2.2.3)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Metadata and travis [\#31](https://github.com/ghoneycutt/puppet-module-hosts/pull/31) ([ghoneycutt](https://github.com/ghoneycutt))
 - Changed outdated \(by next puppet version\) type-function to is\_\<type\> [\#30](https://github.com/ghoneycutt/puppet-module-hosts/pull/30) ([mannbach](https://github.com/mannbach))
@@ -95,7 +100,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.2.1...v2.2.2)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Fix for removing fqdn entry [\#26](https://github.com/ghoneycutt/puppet-module-hosts/pull/26) ([ghoneycutt](https://github.com/ghoneycutt))
 
@@ -103,7 +108,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.2.0...v2.2.1)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Modernize travis [\#28](https://github.com/ghoneycutt/puppet-module-hosts/pull/28) ([ghoneycutt](https://github.com/ghoneycutt))
 
@@ -111,7 +116,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.1.0...v2.2.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Use fqdn [\#24](https://github.com/ghoneycutt/puppet-module-hosts/pull/24) ([eabecho](https://github.com/eabecho))
 
@@ -119,7 +124,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.0.1...v2.1.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Fix dupe fqdn [\#19](https://github.com/ghoneycutt/puppet-module-hosts/pull/19) ([ghoneycutt](https://github.com/ghoneycutt))
 
@@ -127,7 +132,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v2.0.0...v2.0.1)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Fix error when setting enable\_ipv4\_localhost to false [\#15](https://github.com/ghoneycutt/puppet-module-hosts/pull/15) ([ghost](https://github.com/ghost))
 - Gemfile to reflect that 2.7 support has been dropped [\#13](https://github.com/ghoneycutt/puppet-module-hosts/pull/13) ([ghoneycutt](https://github.com/ghoneycutt))
@@ -138,7 +143,7 @@ The API has changed.
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/d8499d6c0f85f3315aa042cc7f51d9963a7744e6...v2.0.0)
 
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+### Merged pull requests:
 
 - Increase quality to 1.0.0 standards [\#10](https://github.com/ghoneycutt/puppet-module-hosts/pull/10) ([ghoneycutt](https://github.com/ghoneycutt))
 - Host entries from hiera [\#9](https://github.com/ghoneycutt/puppet-module-hosts/pull/9) ([ghoneycutt](https://github.com/ghoneycutt))
@@ -150,4 +155,4 @@ The API has changed.
 
 
 
-\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*

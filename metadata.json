@@ -1,6 +1,6 @@
 {
   "name": "ghoneycutt-hosts",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "author": "ghoneycutt",
   "summary": "Manages host entries",
   "license": "Apache-2.0",
