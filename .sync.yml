@@ -7,23 +7,15 @@
 # for the default values.
 ---
 .github/workflows/ci.yaml:
-  unit_name: Puppet ${{ matrix.puppet }} (Ruby ${{ matrix.ruby }} fixtures=${{ matrix.fixtures }})
-  unit_includes:
-    - ruby: '2.7.0'
-      puppet: '7'
-      fixtures: .fixtures.yml
-      allow_failure: false
-    - ruby: '2.7.0'
-      puppet: '7'
-      fixtures: .fixtures-latest.yml
-      allow_failure: true
   acceptance_matrix:
     set:
-      - debian-10
-      - rocky-8
-      - ubuntu-1804
+      - el8
+      - el9
+      - debian-11
+      - ubuntu-2004
     puppet:
       - puppet7
+      - puppet8
 .travis.yml:
   delete: true
 Rakefile:
@@ -31,16 +23,4 @@ Rakefile:
 .gitlab-ci.yml:
   delete: true
 appveyor.yml:
-  delete: true
-spec/acceptance/nodesets/centos-6.yml:
-  delete: true
-spec/acceptance/nodesets/centos-7.yml:
-  delete: true
-spec/acceptance/nodesets/centos-8.yml:
-  delete: true
-spec/acceptance/nodesets/ubuntu-1604.yml:
-  delete: true
-spec/acceptance/nodesets/debian-8.yml:
-  delete: true
-spec/acceptance/nodesets/debian-9.yml:
   delete: true
