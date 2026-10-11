@@ -16,7 +16,7 @@ Manage `/etc/hosts`
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 include hosts
@@ -35,4 +35,3 @@ Data type: `Hash`
 Hash of host resource entries
 
 Default value: `{}`
-

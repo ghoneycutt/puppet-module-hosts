@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v5.0.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v5.0.0) (2026-10-11)
+
+[Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v4.0.0...v5.0.0)
+
+### Merged pull requests:
+
+- Adopt OpenVox 8 and 9 [\#93](https://github.com/ghoneycutt/puppet-module-hosts/pull/93) ([ghoneycutt](https://github.com/ghoneycutt))
+
 ## [v4.0.0](https://github.com/ghoneycutt/puppet-module-hosts/tree/v4.0.0) (2023-11-15)
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-hosts/compare/v3.0.0...v4.0.0)
@@ -134,7 +142,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Merged pull requests:
 
-- Fix error when setting enable\_ipv4\_localhost to false [\#15](https://github.com/ghoneycutt/puppet-module-hosts/pull/15) ([ghost](https://github.com/ghost))
 - Gemfile to reflect that 2.7 support has been dropped [\#13](https://github.com/ghoneycutt/puppet-module-hosts/pull/13) ([ghoneycutt](https://github.com/ghoneycutt))
 - Travis [\#12](https://github.com/ghoneycutt/puppet-module-hosts/pull/12) ([ghoneycutt](https://github.com/ghoneycutt))
 - Support rspec-puppet v1.0.0 [\#11](https://github.com/ghoneycutt/puppet-module-hosts/pull/11) ([ghoneycutt](https://github.com/ghoneycutt))
@@ -147,7 +154,6 @@ All notable changes to this project will be documented in this file. The format 
 
 - Increase quality to 1.0.0 standards [\#10](https://github.com/ghoneycutt/puppet-module-hosts/pull/10) ([ghoneycutt](https://github.com/ghoneycutt))
 - Host entries from hiera [\#9](https://github.com/ghoneycutt/puppet-module-hosts/pull/9) ([ghoneycutt](https://github.com/ghoneycutt))
-- Add ability to add hosts [\#8](https://github.com/ghoneycutt/puppet-module-hosts/pull/8) ([ghost](https://github.com/ghost))
 - Normalize testing [\#7](https://github.com/ghoneycutt/puppet-module-hosts/pull/7) ([anders-k-lindgren](https://github.com/anders-k-lindgren))
 - Collect all [\#6](https://github.com/ghoneycutt/puppet-module-hosts/pull/6) ([ghoneycutt](https://github.com/ghoneycutt))
 - Boolean fix merge [\#3](https://github.com/ghoneycutt/puppet-module-hosts/pull/3) ([jwennerberg](https://github.com/jwennerberg))
