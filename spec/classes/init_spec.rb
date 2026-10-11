@@ -4,7 +4,7 @@ describe 'hosts' do
   # instead of wasting resources testing this many times with different
   # platform data.
   on_supported_os({
-    supported_os: [{ 'operatingsystem' => 'RedHat', 'operatingsystemrelease' => ['8'] }]
+    supported_os: [{ 'operatingsystem' => 'RedHat', 'operatingsystemrelease' => ['9'] }]
   }).each do |os, facts|
     context "on #{os} with default values for class parameters" do
       let(:facts) { facts }
@@ -41,14 +41,12 @@ describe 'hosts' do
   end
 
   describe 'on unsupported platform' do
-    let :facts do
-      { :os['family'] => 'unsupported' }
+    let(:facts) do
+      { os: { 'family' => 'unsupported', 'name' => 'unsupported', 'release' => { 'full' => '1' } } }
     end
 
-    it 'does not fail' do
-      expect do
-        is_expected.to contain_class('hosts')
-      end
-    end
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('hosts') }
+    it { is_expected.to have_host_resource_count(0) }
   end
 end

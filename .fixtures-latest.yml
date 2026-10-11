@@ -7,5 +7,3 @@ fixtures:
       repo: https://github.com/puppetlabs/puppetlabs-stdlib.git
     host_core:
       repo: https://github.com/puppetlabs/puppetlabs-host_core.git
-  symlinks:
-    hosts: "#{source_dir}"

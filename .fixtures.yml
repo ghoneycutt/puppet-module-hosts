@@ -3,9 +3,7 @@ fixtures:
   repositories:
     'stdlib':
       repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
-      ref: 'v9.0.0'
+      ref: 'v9.7.0'
     'host_core':
       repo: 'https://github.com/puppetlabs/puppetlabs-host_core.git'
-      ref: 'v1.1.0'
-  symlinks:
-    hosts: "#{source_dir}"
+      ref: 'v2.1.0'
