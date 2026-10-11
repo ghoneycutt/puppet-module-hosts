@@ -6,13 +6,13 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="file_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -57,58 +59,46 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'>
-<h1 id="label-puppet-module-hosts">puppet-module-hosts</h1>
-
-<h4 id="label-Table+of+Contents">Table of Contents</h4>
-<ol><li>
-<p><a href="#module-description">Module Description - What the module does and why it is useful</a></p>
-</li><li>
-<p><a href="#setup">Setup - The basics of getting started with hosts</a></p>
-</li><li>
-<p><a href="#what-hosts-affects">What hosts affects</a></p>
-</li><li>
-<p><a href="#setup-requirements">Setup requirements</a></p>
-</li><li>
-<p><a href="#beginning-with-hosts">Beginning with hosts</a></p>
-</li><li>
-<p><a href="#usage">Usage - Configuration options and additional functionality</a></p>
-</li><li>
-<p><a href="#limitations">Limitations - OS compatibility, etc.</a></p>
-</li><li>
-<p><a href="#development">Development - Guide for contributing to the module</a></p>
-</li></ol>
-
-<h2 id="label-Description">Description</h2>
-
-<p>This is a very simple module to manage host entries in <code>/etc/hosts</code>. It works by applying a hash of <code>host</code> resources.</p>
-
-<p>Documented with Puppet Strings at <a href="http://ghoneycutt.github.io/puppet-module-hosts/">ghoneycutt.github.io/puppet-module-hosts/</a>.</p>
-
-<h2 id="label-Setup">Setup</h2>
-
-<h3 id="label-What+hosts+affects">What hosts affects</h3>
-
-<p>Generally just the <code>/etc/hosts</code> file though you may use the <code>target</code> attribute of the <code>host</code> resource to manage host entries in other files.</p>
-
-<h3 id="label-Setup+requiremements">Setup requiremements</h3>
-
-<p>The ability to manage <code>/etc/hosts</code> was moved out of Puppet and into a core module at <a href="https://github.com/puppetlabs/puppetlabs-host_core">github.com/puppetlabs/puppetlabs-host_core</a> and this module relies upon it.</p>
-
-<h3 id="label-Beginning+with+hosts">Beginning with hosts</h3>
-
+      <div id="content"><div id='filecontents'><h1 id="puppet_module_hosts">puppet-module-hosts</h1>
+<h4 id="Table_of_Contents">Table of Contents</h4>
+<ol>
+<li><a href="#module-description">Module Description - What the module does and why it is useful</a></li>
+<li>
+<a href="#setup">Setup - The basics of getting started with hosts</a>
+<ul>
+<li><a href="#what-hosts-affects">What hosts affects</a></li>
+<li><a href="#setup-requirements">Setup requirements</a></li>
+<li><a href="#beginning-with-hosts">Beginning with hosts</a></li>
+</ul>
+</li>
+<li><a href="#usage">Usage - Configuration options and additional functionality</a></li>
+<li><a href="#limitations">Limitations - OS compatibility, etc.</a></li>
+<li><a href="#development">Development - Guide for contributing to the module</a></li>
+</ol>
+<h2 id="Description">Description</h2>
+<p>This is a very simple module to manage host entries in <code>/etc/hosts</code>. It
+works by applying a hash of <code>host</code> resources.</p>
+<p>Documented with Puppet Strings at
+<a href="http://ghoneycutt.github.io/puppet-module-hosts/"><a href="http://ghoneycutt.github.io/puppet-module-hosts/">http://ghoneycutt.github.io/puppet-module-hosts/</a></a>.</p>
+<h2 id="Setup">Setup</h2>
+<h3 id="What_hosts_affects">What hosts affects</h3>
+<p>Generally just the <code>/etc/hosts</code> file though you may use the <code>target</code>
+attribute of the <code>host</code> resource to manage host entries in other files.</p>
+<h3 id="Setup_requiremements">Setup requiremements</h3>
+<p>The ability to manage <code>/etc/hosts</code> was moved out of Puppet and into a
+core module at
+<a href="https://github.com/puppetlabs/puppetlabs-host_core"><a href="https://github.com/puppetlabs/puppetlabs-host_core">https://github.com/puppetlabs/puppetlabs-host_core</a></a>
+and this module relies upon it.</p>
+<h3 id="Beginning_with_hosts">Beginning with hosts</h3>
 <p>Declare the <code>hosts</code> class.</p>
-
-<h2 id="label-Usage">Usage</h2>
-
-<p>The normal use case. If you are not adding the local system by default as shown below, this is a good option. Then you can just add <code>hosts::hosts</code> entries throughout Hiera.</p>
-
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_include'>include</span> <span class='id identifier rubyid_hosts'>hosts</span>
+<h2 id="Usage">Usage</h2>
+<p>The normal use case. If you are not adding the local system by default
+as shown below, this is a good option. Then you can just add
+<code>hosts::hosts</code> entries throughout Hiera.</p>
+<pre class="code puppet"><code class="puppet">include hosts
 </code></pre>
-
 <p>Sample profile which implements functionality from previous versions.</p>
-
-<pre class="code ruby"><code class="ruby"># Lookup everything in Hiera using the key &#39;host_entries&#39; and add the
+<pre class="code puppet"><code class="puppet"># Lookup everything in Hiera using the key &#39;host_entries&#39; and add the
 # local system with its FQDN and IP address.
 $hosts = lookup(&#39;host_entries&#39;, undef, deep, {}) + {
   $facts[&#39;networking&#39;][&#39;hostname&#39;] =&gt; {
@@ -122,19 +112,14 @@ class { &#39;hosts&#39;:
   hosts =&gt; $hosts,
 }
 </code></pre>
-
-<h2 id="label-Limitations">Limitations</h2>
-
-<p>This module officially supports the platforms listed in the <code>metadata.json</code>. It does not fail on unsupported platforms and has been known to work on many, many platforms since its creation in 2010.</p>
-
-<h2 id="label-Development">Development</h2>
-
-<p>See <a href="CONTRIBUTING_md.html">CONTRIBUTING.md</a></p>
-
-<h2 id="label-License">License</h2>
-
-<p>See <a href="LICENSE">LICENSE</a> file.</p>
-</div></div>
+<h2 id="Limitations">Limitations</h2>
+<p>This module officially supports the platforms listed in the
+<code>metadata.json</code>. It does not fail on unsupported platforms and has been
+known to work on many, many platforms since its creation in 2010.</p>
+<h2 id="Development">Development</h2>
+<p>See <a href="CONTRIBUTING.md">CONTRIBUTING.md</a></p>
+<h2 id="License">License</h2>
+<p>See <a href="LICENSE">LICENSE</a> file.</p></div></div>
 
       <div id="footer">
      Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
